@@ -17,7 +17,7 @@
   <link href="../css/normalize.css" rel="stylesheet" type="text/css">
   <link href="../css/hydromax.css" rel="stylesheet" type="text/css">
   <link href="../css/hydromax.style.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="../css/mega-nav.css" rel="stylesheet" type="text/css">  <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">WebFont.load({  google: {    families: ["Instrument Sans:300,400,500,600,700","Manrope:300,400,500,600,700"]  }});</script>
@@ -27,10 +27,10 @@
 </head>
 <body class="body">
   <div class="page-wrap">
-    <header class="header-area">
+                                    <header class="header-area">
       <div class="w-layout-blockcontainer container w-container">
-        <div data-w-id="cbb32482-8282-e6b9-8fab-3904d54f3c89" class="header-wrap">
-          <a href="../index.html" class="nav-logo-wrap w-inline-block"><img src="../images/arvora.svg" loading="lazy" alt="Logo" class="nav-logo"><img src="../images/arvora-white.svg" loading="lazy" alt="Logo" class="nav-logo-md"></a>
+        <div class="header-wrap">
+          <a href="../index.html" class="nav-logo-wrap w-inline-block"><img src="../videos/logo.png" loading="lazy" width="60" height="Auto" alt="Hydromax" sizes="(max-width: 479px) 100vw, 60px" class="nav-logo"></a>
           <ul role="list" class="nav">
             <li class="nav-item">
               <a href="../index.html" class="nav-link">Home</a>
@@ -41,23 +41,65 @@
             <li class="nav-item">
               <a href="../service.html" class="nav-link">Service</a>
             </li>
-            <li class="nav-item">
-              <a href="../blog.html" class="nav-link">Blog</a>
-            </li>
-            <li class="nav-item">
-              <div data-hover="false" data-delay="0" class="dropdown w-dropdown">
-                <div class="dropdown-toggle w-dropdown-toggle">
-                  <div class="dropdown-icon w-icon-dropdown-toggle"></div>
-                  <div class="dropdown-text">Pages</div>
+            <li class="nav-item nav-item-mega">
+              <a href="../pumps.html" class="nav-link nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Products</a>
+              <div class="mega-dropdown" role="menu" aria-label="Products" aria-hidden="true">
+                <div class="mega-dropdown-panel">
+                  <div class="mega-dropdown-layout">
+                    <div class="mega-dropdown-col-links">
+                      <ul class="mega-dropdown-list" role="none">
+                    <li role="none">
+                      <a href="../pumps.html" class="mega-product-link" role="menuitem" data-preview="../images/somu40.png" data-preview-alt="Water Pumps">
+                        <span class="mega-product-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h4v5H3zM17 5h4v5h-4z"/><path d="M7 19V9a3 3 0 013-3h4"/><path d="M14 6h3v3"/></svg></span>
+                        <span class="mega-product-copy">
+                          <span class="mega-product-title">Water Pumps</span>
+                          <span class="mega-product-desc">Reliable pumping for municipal and industrial water systems.</span>
+                        </span>
+                      </a>
+                    </li>
+                    <li role="none">
+                      <a href="../watertreatment.html" class="mega-product-link" role="menuitem" data-preview="../images/som34.png" data-preview-alt="Water Treatment">
+                        <span class="mega-product-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.32 0z"/></svg></span>
+                        <span class="mega-product-copy">
+                          <span class="mega-product-title">Water Treatment</span>
+                          <span class="mega-product-desc">Treatment systems built for consistent, compliant water quality.</span>
+                        </span>
+                      </a>
+                    </li>
+                    <li role="none">
+                      <a href="../Aeriation.html" class="mega-product-link" role="menuitem" data-preview="../images/somu42.png" data-preview-alt="Aeriations">
+                        <span class="mega-product-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2 2 0 1019 12H2"/></svg></span>
+                        <span class="mega-product-copy">
+                          <span class="mega-product-title">Aeriations</span>
+                          <span class="mega-product-desc">Aeration technology for efficient biological wastewater treatment.</span>
+                        </span>
+                      </a>
+                    </li>
+                    <li role="none">
+                      <a href="../heatingsolution.html" class="mega-product-link" role="menuitem" data-preview="../images/som35.png" data-preview-alt="Heating Solutions">
+                        <span class="mega-product-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></span>
+                        <span class="mega-product-copy">
+                          <span class="mega-product-title">Heating Solutions</span>
+                          <span class="mega-product-desc">Thermal systems for stable process heating and energy efficiency.</span>
+                        </span>
+                      </a>
+                    </li>
+                    <li role="none">
+                      <a href="../Industrialchemicals.html" class="mega-product-link" role="menuitem" data-preview="../images/som38.png" data-preview-alt="Industrial Chemicals">
+                        <span class="mega-product-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6v7l5 9a2 2 0 01-1.74 3H5.74A2 2 0 014 19l5-9V3z"/><path d="M10 3h4"/></svg></span>
+                        <span class="mega-product-copy">
+                          <span class="mega-product-title">Industrial Chemicals</span>
+                          <span class="mega-product-desc">Specialty chemicals for treatment performance and plant uptime.</span>
+                        </span>
+                      </a>
+                    </li>
+                      </ul>
+                    </div>
+                    <div class="mega-dropdown-col-preview" aria-hidden="true">
+                      <img src="../images/somu40.png" alt="Water Pumps" loading="lazy" class="mega-preview-image">
+                    </div>
+                  </div>
                 </div>
-                <nav class="dropdown-navigation w-dropdown-list">
-                  <a href="https://arvora.webflow.io/blog/the-future-of-solar-energy-trends-innovations" class="dropdown-link w-dropdown-link">Blog Details</a>
-                  <a href="https://arvora.webflow.io/service/wind-power" class="dropdown-link w-dropdown-link">Service Details</a>
-                  <a href="../templates/style-guide.html" aria-current="page" class="dropdown-link w-dropdown-link w--current">Style Guide</a>
-                  <a href="../templates/changelog.html" class="dropdown-link w-dropdown-link">Changelog</a>
-                  <a href="../templates/licenses.html" class="dropdown-link w-dropdown-link">Licenses</a>
-                  <a href="https://arvora.webflow.io/404" class="dropdown-link w-dropdown-link">404</a>
-                </nav>
               </div>
             </li>
             <li class="nav-item">
@@ -77,7 +119,7 @@
       <div class="offcanvas-main">
         <div class="offcanvas-wrap">
           <div class="offcanvas-top">
-            <a href="#" class="offcanvas-logo-wrap w-inline-block"><img src="../images/arvora.svg" alt="Arvora" width="Auto" class="offcanvas-logo"></a><img src="../images/close.svg" loading="lazy" data-w-id="d796b440-c147-1529-3014-cb4222a1441c" alt="Close" class="close-icon">
+            <a href="../index.html" class="offcanvas-logo-wrap w-inline-block"><img src="../videos/logo.png" loading="lazy" alt="Hydromax" class="offcanvas-logo"></a><button type="button" class="offcanvas-close-btn" aria-label="Close menu"><img src="../images/close.svg" loading="lazy" alt="" class="close-icon" data-w-id="d796b440-c147-1529-3014-cb4222a1441c"></button>
           </div>
           <ul role="list" class="offcanvas-nav">
             <li class="offcanvas-nav-item">
@@ -89,8 +131,25 @@
             <li class="offcanvas-nav-item">
               <a href="../service.html" class="offcanvas-nav-link">Service</a>
             </li>
-            <li class="offcanvas-nav-item">
-              <a href="../blog.html" class="offcanvas-nav-link">Blog</a>
+            <li class="offcanvas-nav-item offcanvas-nav-item-products">
+              <button type="button" class="offcanvas-nav-link offcanvas-products-toggle" aria-expanded="false" aria-controls="offcanvas-products-menu">Products</button>
+              <ul id="offcanvas-products-menu" class="offcanvas-products-menu" role="list" hidden>
+              <li class="offcanvas-products-sub-item">
+                <a href="../pumps.html" class="offcanvas-products-sub-link">Water Pumps</a>
+              </li>
+              <li class="offcanvas-products-sub-item">
+                <a href="../watertreatment.html" class="offcanvas-products-sub-link">Water Treatment</a>
+              </li>
+              <li class="offcanvas-products-sub-item">
+                <a href="../Aeriation.html" class="offcanvas-products-sub-link">Aeriations</a>
+              </li>
+              <li class="offcanvas-products-sub-item">
+                <a href="../heatingsolution.html" class="offcanvas-products-sub-link">Heating Solutions</a>
+              </li>
+              <li class="offcanvas-products-sub-item">
+                <a href="../Industrialchemicals.html" class="offcanvas-products-sub-link">Industrial Chemicals</a>
+              </li>
+              </ul>
             </li>
             <li class="offcanvas-nav-item">
               <a href="../contact.html" class="offcanvas-nav-link">Contact</a>
@@ -261,7 +320,7 @@
         </div>
       </section>
     </div>
-    <footer class="footer-area">
+                                    <footer class="footer-area">
       <div class="w-layout-blockcontainer container w-container">
         <div class="footer-top">
           <div class="footer-widget">
@@ -286,8 +345,8 @@
                 </a>
               </li>
               <li class="nav-item-two">
-                <a href="../blog.html" class="footer-link w-inline-block">
-                  <div class="nav-link-two">Blog</div><img src="../images/arrow-right.svg" loading="lazy" alt="" class="arrow-right">
+                <a href="../pumps.html" class="footer-link w-inline-block">
+                  <div class="nav-link-two">Products</div><img src="../images/arrow-right.svg" loading="lazy" alt="" class="arrow-right">
                 </a>
               </li>
               <li class="nav-item-two">
@@ -298,17 +357,17 @@
             </ul>
           </div>
         </div>
-        <div class="footer-btm"><img class="footer-img" src="../images/sres322.png" width="400" height="Auto" alt="Arvora" sizes="(max-width: 479px) 100vw, 400px" data-w-id="ab93d299-3b29-96eb-810e-55a6992be547" loading="lazy" srcset="../images/sres322-p-500.png 500w, ../images/sres322-p-800.png 800w, ../images/sres322.png 1000w">
-          <div class="footer-btm-right"><img src="../images/sreshlogo.png" loading="lazy" width="Auto" height="Auto" alt="Logo" srcset="../images/sreshlogo-p-500.png 500w, ../images/sreshlogo-p-800.png 800w, ../images/sreshlogo-p-1080.png 1080w, ../images/sreshlogo-p-1600.png 1600w, ../images/sreshlogo.png 1920w" sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" data-w-id="ab93d299-3b29-96eb-810e-55a6992be548"></div>
+        <div class="footer-btm"><img class="footer-img" src="../videos/logo.png" width="400" height="Auto" alt="shresta" sizes="(max-width: 479px) 100vw, 400px" data-w-id="ab93d299-3b29-96eb-810e-55a6992be547" loading="lazy" srcset="../images/sres322-p-500.png 500w, ../images/sres322-p-800.png 800w, ../images/sres322.png 1000w">
+          <div class="footer-btm-right"><img src="../videos/logo.png" loading="lazy" width="Auto" height="Auto" alt="Logo" sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" data-w-id="ab93d299-3b29-96eb-810e-55a6992be548"></div>
         </div>
         <div data-w-id="ab93d299-3b29-96eb-810e-55a6992be549" class="footer-copyright">
-          <p class="copyright-text">© 2026 - All rights reserved Shreshta Enviortech Pvt Ltd, Developed by <a href="https://webflow.com/templates/designers/orbix-studio" class="link">Sameer</a>
+          <p class="copyright-text">© 2026 - All rights reserved Hydromax Pvt Ltd, Developed by <a href="https://sameer-shaik.com" class="link">Sameer</a>
           </p>
         </div>
       </div>
     </footer>
   </div>
-  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69e35025b207e3339c396d73" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69e35025b207e3339c396d73" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>  <script src="../js/mega-nav.js" type="text/javascript"></script>
   <script src="../js/hydromax.js" type="text/javascript"></script>
 </body>
 </html>

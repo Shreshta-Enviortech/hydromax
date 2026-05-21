@@ -1,0 +1,324 @@
+/* Products mega dropdown — extends existing navbar without layout changes */
+
+.header-wrap {
+  position: relative;
+}
+
+.nav-item-mega {
+  position: static;
+}
+
+.nav-item-mega .nav-mega-trigger {
+  display: inline-block;
+}
+
+.mega-dropdown {
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-top: 0;
+  transform: translateX(-50%) translateY(2px);
+  width: min(720px, calc(100vw - 32px));
+  max-width: 950px;
+  z-index: 10001;
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease;
+}
+
+/* Safe hover bridge between navbar and panel */
+.mega-dropdown::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -8px;
+  height: 8px;
+}
+
+.nav-item-mega.is-mega-open .mega-dropdown {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.mega-dropdown-panel {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.04);
+  padding: 10px 10px 10px 12px;
+  overflow: hidden;
+}
+
+.mega-dropdown-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 0;
+  min-height: 168px;
+}
+
+.mega-dropdown-col-links {
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.mega-dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  column-gap: 8px;
+  row-gap: 2px;
+  height: 100%;
+}
+
+.mega-product-link {
+  border-radius: 10px;
+  padding: 6px 8px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.mega-product-link:hover,
+.mega-product-link.is-active,
+.mega-product-link:focus-visible {
+  background-color: rgba(33, 112, 183, 0.06);
+  outline: none;
+}
+
+.mega-product-link:hover .mega-product-icon,
+.mega-product-link.is-active .mega-product-icon,
+.mega-product-link:focus-visible .mega-product-icon {
+  color: #2170b7;
+  background-color: rgba(33, 112, 183, 0.1);
+}
+
+.mega-product-link:hover .mega-product-title,
+.mega-product-link.is-active .mega-product-title,
+.mega-product-link:focus-visible .mega-product-title {
+  color: #2170b7;
+}
+
+.mega-product-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--gray--100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.mega-product-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.mega-product-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.mega-product-title {
+  color: var(--dark--100);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: color 0.2s ease;
+}
+
+.mega-product-desc {
+  color: var(--gray--100);
+  font-size: 11px;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mega-dropdown-col-preview {
+  flex: none;
+  width: 200px;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  padding-left: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.mega-preview-image {
+  border-radius: 12px;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  min-height: 148px;
+  max-height: 168px;
+  display: block;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  transition: opacity 0.25s ease;
+}
+
+.mega-preview-image.is-fading {
+  opacity: 0.45;
+}
+
+/* Mobile header logo — shlogo visible (replaces missing sresh2.png.svg) */
+@media screen and (max-width: 991px) {
+  .nav-logo {
+    display: block !important;
+    width: auto;
+    max-height: 52px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .nav-logo-md {
+    display: none !important;
+  }
+
+  .mega-dropdown {
+    display: none !important;
+  }
+}
+
+/* Offcanvas — current logo + Products submenu (text only) */
+.offcanvas-logo {
+  filter: none !important;
+  max-height: 56px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.offcanvas-close-btn {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 8px;
+  cursor: pointer;
+  line-height: 0;
+  position: relative;
+  z-index: 2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.offcanvas-close-btn .close-icon {
+  display: block;
+  max-width: 18px;
+  pointer-events: none;
+}
+
+.offcanvas-nav-item-products {
+  padding-bottom: var(--_sizes---space--space-10);
+}
+
+.offcanvas-products-toggle.offcanvas-nav-link {
+  font-size: var(--_typography---h1--font-size);
+  line-height: var(--_typography---h1--line-height);
+  letter-spacing: var(--_typography---h1--letter-spacing);
+  font-weight: var(--_typography---h1--font-weight);
+  color: var(--gray--300);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: color 0.4s;
+}
+
+.offcanvas-products-toggle.offcanvas-nav-link:hover,
+.offcanvas-products-toggle.offcanvas-nav-link[aria-expanded="true"] {
+  color: var(--white--100);
+}
+
+.offcanvas-products-toggle::after {
+  content: "";
+  display: inline-block;
+  margin-left: 0.4em;
+  width: 0.45em;
+  height: 0.45em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-0.1em);
+  transition: transform 0.2s ease;
+  vertical-align: middle;
+}
+
+.offcanvas-products-toggle[aria-expanded="true"]::after {
+  transform: rotate(-135deg) translateY(0.1em);
+}
+
+.offcanvas-products-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--_sizes---space--space-16);
+}
+
+.offcanvas-products-menu[hidden] {
+  display: none;
+}
+
+.offcanvas-products-sub-item {
+  padding-bottom: var(--_sizes---space--space-10);
+}
+
+.offcanvas-products-sub-link {
+  color: var(--gray--300);
+  font-family: var(--_font-family---heading-font);
+  font-size: clamp(1.125rem, 4vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.offcanvas-products-sub-link:hover,
+.offcanvas-products-sub-link:focus-visible {
+  color: var(--white--100);
+  outline: none;
+}
+
+@media screen and (max-width: 767px) {
+  .mega-dropdown-layout {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .mega-dropdown-col-preview {
+    display: none;
+  }
+
+  .mega-dropdown-list {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-flow: row;
+  }
+}

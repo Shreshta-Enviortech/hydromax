@@ -1,0 +1,212 @@
+/* Centrifugal pumps — sticky card stack */
+
+.pump-centrifugal-area {
+  padding-top: var(--_sizes---space--space-100);
+  padding-bottom: var(--_sizes---space--space-40);
+}
+
+.pump-centrifugal {
+  max-width: 1144px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pump-centrifugal-header {
+  text-align: center;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--_sizes---space--space-60);
+}
+
+.pump-centrifugal-header .heading-four {
+  margin-top: 0;
+  margin-bottom: var(--_sizes---space--space-16);
+}
+
+.pump-centrifugal-header-text {
+  color: var(--gray--100);
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.pump-centrifugal-stack {
+  position: relative;
+  max-width: 1144px;
+  margin-left: auto;
+  margin-right: auto;
+  /* Lets the last sticky card finish stacking before the section ends */
+  padding-bottom: 6vh;
+}
+
+.pump-stack-card {
+  position: sticky;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-column-gap: 54px;
+  align-items: center;
+  min-height: 480px;
+  margin-bottom: 28vh;
+  padding: 50px 48px;
+  border-radius: 24px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.95) inset,
+    0 2px 6px rgba(15, 23, 42, 0.05),
+    0 14px 36px rgba(15, 23, 42, 0.1),
+    0 28px 56px rgba(15, 23, 42, 0.08);
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s ease,
+    opacity 0.5s ease;
+  will-change: transform;
+}
+
+.pump-stack-card:nth-child(1) {
+  top: 88px;
+  z-index: 10;
+  background-color: #ffffff;
+}
+
+.pump-stack-card:nth-child(2) {
+  top: 104px;
+  z-index: 20;
+  background-color: #f8f9fb;
+}
+
+.pump-stack-card:nth-child(3) {
+  top: 120px;
+  z-index: 30;
+  background-color: #f3f5f8;
+}
+
+.pump-stack-card:nth-child(4) {
+  top: 120px;
+  z-index: 40;
+  background-color: #eef1f5;
+  /* Small runway so card 4 can fully stick on card 3 (not a huge gap below) */
+  margin-bottom: 14vh;
+}
+
+.pump-stack-card.is-behind {
+  transform: scale(0.975) translateY(-6px);
+  opacity: 0.92;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+    0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.pump-stack-card.is-active {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  border-color: rgba(15, 23, 42, 0.14);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.9) inset,
+    0 20px 48px rgba(15, 23, 42, 0.1);
+}
+
+.pump-stack-copy {
+  min-width: 0;
+}
+
+.pump-stack-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2170b7;
+  background: rgba(33, 112, 183, 0.08);
+  border: 1px solid rgba(33, 112, 183, 0.12);
+}
+
+.pump-stack-title {
+  color: var(--dark--100);
+  font-family: var(--_font-family---heading-font);
+  font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+.pump-stack-text {
+  color: var(--gray--100);
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0 0 14px;
+}
+
+.pump-stack-text:last-child {
+  margin-bottom: 0;
+}
+
+.pump-stack-visual {
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  min-height: 380px;
+  overflow: hidden;
+  position: relative;
+}
+
+.pump-stack-image {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+@media screen and (max-width: 991px) {
+  .pump-stack-card {
+    grid-template-columns: 1fr;
+    grid-row-gap: 28px;
+    min-height: 0;
+    padding: 36px 28px;
+    margin-bottom: 22vh;
+    top: 72px !important;
+  }
+
+  .pump-stack-card:nth-child(2) {
+    top: 84px !important;
+  }
+
+  .pump-stack-card:nth-child(3) {
+    top: 96px !important;
+  }
+
+  .pump-stack-card:nth-child(4) {
+    top: 96px !important;
+    margin-bottom: 12vh;
+  }
+
+  .pump-stack-visual,
+  .pump-stack-image {
+    min-height: 280px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .pump-stack-card {
+    margin-bottom: 18vh;
+    padding: 28px 22px;
+  }
+
+  .pump-stack-card.is-behind {
+    transform: scale(0.99);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pump-stack-card {
+    transition: none;
+  }
+
+  .pump-stack-card.is-behind {
+    transform: none;
+    opacity: 1;
+  }
+}
