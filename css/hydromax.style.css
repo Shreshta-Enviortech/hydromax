@@ -388,26 +388,72 @@ blockquote {
 
 .solution-wrap {
   z-index: 999;
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
   grid-template-rows: auto;
   grid-template-columns: 1fr 1fr 1fr;
   grid-auto-columns: 1fr;
-  padding-top: 300px;
+  align-items: stretch;
+  padding-top: 140px;
   display: grid;
   position: relative;
 }
 
 .solution-card {
-  padding: var(--_sizes---space--space-30);
-  border-radius: var(--_sizes---radius--radius-16);
+  border-radius: var(--_sizes---radius--radius-20);
   background-color: var(--white--100);
+  flex-flow: column;
+  height: 100%;
+  padding: 8px;
+  display: flex;
+}
+
+.solution-photo {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 140px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--_sizes---radius--radius-10);
+  display: block;
+}
+
+.solution-card .solution-title {
+  font-size: var(--_typography---md--font-size);
+  line-height: var(--_typography---md--line-height);
+  padding: var(--_sizes---space--space-16) 0 var(--_sizes---space--space-10);
+}
+
+.solution-card .section-content {
+  font-size: var(--_typography---xxs--font-size);
+  line-height: var(--_typography---xxs--line-height);
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.solution-learn-more {
+  color: var(--dark--100);
+  font-family: var(--_font-family---body-font);
+  font-size: var(--_typography---xs--font-size);
+  line-height: var(--_typography---xs--line-height);
+  font-weight: 500;
+  align-self: flex-start;
+  margin-top: 0;
+  padding-top: var(--_sizes---space--space-10);
+  padding-bottom: var(--_sizes---space--space-16);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color .4s;
+}
+
+.solution-learn-more:hover {
+  color: var(--gray--100);
 }
 
 .solution-top {
   z-index: 999;
-  grid-column-gap: 120px;
-  grid-row-gap: 120px;
+  grid-column-gap: 80px;
+  grid-row-gap: 40px;
   grid-template-rows: auto;
   grid-template-columns: 1fr .5fr;
   grid-auto-columns: 1fr;
@@ -422,8 +468,6 @@ blockquote {
   font-weight: var(--_typography---h6--font-weight);
   margin-top: 0;
   margin-bottom: 0;
-  padding-top: 130px;
-  padding-bottom: 20px;
 }
 
 .heading-three {
@@ -637,6 +681,25 @@ blockquote {
   flex-flow: column;
   align-items: flex-start;
   display: flex;
+}
+
+@media screen and (min-width: 992px) {
+  .hero-area > .w-layout-blockcontainer.container {
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 36px;
+    padding-right: 48px;
+  }
+
+  .hero-wrap {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .hero-left {
+    max-width: min(720px, 58vw);
+  }
 }
 
 .count-text {
@@ -1423,12 +1486,12 @@ blockquote {
 }
 
 .team-wrap {
-  grid-column-gap: var(--_sizes---space--space-16);
-  grid-row-gap: var(--_sizes---space--space-40);
-  grid-template-rows: auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-auto-columns: 1fr;
-  display: grid;
+  /* Use flex so fewer cards (e.g. 2) are centered nicely */
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_sizes---space--space-40) var(--_sizes---space--space-16);
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .team-card {
@@ -1437,6 +1500,16 @@ blockquote {
   border-radius: var(--_sizes---radius--radius-12) var(--_sizes---radius--radius-12) var(--_sizes---radius--radius-0) var(--_sizes---radius--radius-0);
   position: relative;
   overflow: hidden;
+}
+
+/* Ensure each team card has a sensible width when using flex */
+.team-card {
+  flex: 0 0 320px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .team-img {
@@ -1510,6 +1583,8 @@ blockquote {
   grid-template-columns: 1fr .25fr 1fr;
   grid-auto-columns: 1fr;
   display: flex;
+  justify-content: center; /* center left/right columns as a group */
+  gap: var(--_sizes---space--space-80);
 }
 
 .step-left {
@@ -1527,6 +1602,9 @@ blockquote {
 .step-right {
   border-right-color: var(--white--100);
   border-bottom-color: var(--white--100);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center the step cards vertically in this column */
 }
 
 .step-card {
@@ -1536,6 +1614,12 @@ blockquote {
   border-bottom: 3px solid var(--white--100);
   border-radius: var(--_sizes---space--space-16);
   background-color: var(--white--100);
+}
+
+/* Limit the width of each step card so they appear centered and consistent */
+.step-card {
+  width: 100%;
+  max-width: 420px;
 }
 
 .step-number {
@@ -1627,6 +1711,67 @@ blockquote {
   border-radius: var(--_sizes---radius--radius-20);
   position: relative;
   overflow: hidden;
+}
+
+.banner-video {
+  z-index: 1;
+  border-radius: var(--_sizes---radius--radius-20);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0%;
+}
+
+.banner-overlay {
+  z-index: 2;
+  border-radius: var(--_sizes---radius--radius-20);
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.62) 45%, rgba(0, 0, 0, 0.82) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.45) 100%);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0%;
+  pointer-events: none;
+}
+
+.banner-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.14;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.banner-area:has(.banner-video) {
+  box-sizing: border-box;
+  min-height: 600px;
+  height: 600px;
+  padding-top: 0;
+  padding-bottom: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.banner-area:has(.banner-video) .w-layout-blockcontainer {
+  width: 100%;
+}
+
+.banner-area:has(.banner-video) .banner-wrap {
+  grid-template-columns: 1fr;
+  grid-column-gap: 0;
+  grid-row-gap: 14px;
+  width: 100%;
+}
+
+.banner-area:has(.banner-video) .heading-two.text-white,
+.banner-area:has(.banner-video) .section-content.text-white {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
 }
 
 .banner-wrap {
@@ -2777,7 +2922,7 @@ blockquote {
   }
 
   .solution-wrap {
-    padding-top: 410px;
+    padding-top: 200px;
   }
 
   .hero-overlay {
@@ -3025,7 +3170,7 @@ blockquote {
 
   .solution-wrap {
     grid-template-columns: 1fr 1fr;
-    padding-top: 64px;
+    padding-top: 40px;
   }
 
   .solution-top {
@@ -3182,6 +3327,12 @@ blockquote {
 
   .banner-area {
     padding-top: 240px;
+  }
+
+  .banner-area:has(.banner-video) {
+    min-height: 520px;
+    height: 520px;
+    padding-bottom: 96px;
   }
 
   .tag-link {
@@ -3508,6 +3659,12 @@ blockquote {
     padding-top: 219px;
   }
 
+  .banner-area:has(.banner-video) {
+    min-height: 480px;
+    height: 480px;
+    padding-bottom: 80px;
+  }
+
   .banner-wrap {
     grid-column-gap: 20px;
     grid-row-gap: 20px;
@@ -3679,7 +3836,7 @@ blockquote {
   }
 
   .solution-wrap {
-    padding-top: 40px;
+    padding-top: 28px;
   }
 
   .solution-top {
@@ -3687,8 +3844,17 @@ blockquote {
     grid-row-gap: 15px;
   }
 
-  .solution-title {
-    padding-top: 45px;
+  .solution-card {
+    padding: 6px;
+  }
+
+  .solution-photo {
+    min-height: 120px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .solution-card .solution-title {
+    padding: 14px 0 8px;
   }
 
   .portfolio-img {
@@ -3777,6 +3943,12 @@ blockquote {
   .banner-area {
     margin-top: -62px;
     padding-top: 230px;
+  }
+
+  .banner-area:has(.banner-video) {
+    min-height: 440px;
+    height: 440px;
+    padding-bottom: 72px;
   }
 
   .banner-wrap {
