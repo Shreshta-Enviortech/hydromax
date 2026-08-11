@@ -1,0 +1,221 @@
+/* Clients & project partners — logo wall */
+
+/* ── Hero marquee strip: normalise client PNG logos ──── */
+
+.brand-item {
+  justify-content: center;
+  min-width: 190px;
+  height: 118px;
+  padding: 24px 28px;
+}
+
+.brand-logo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+
+.clients-area {
+  background-color: var(--white--100);
+  padding-top: var(--_sizes---space--space-100);
+  padding-bottom: var(--_sizes---space--space-100);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+
+.clients-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto var(--_sizes---space--space-60);
+}
+
+.clients-eyebrow {
+  display: inline-block;
+  color: var(--gray--400);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: var(--_sizes---space--space-20);
+}
+
+.clients-header .heading-four {
+  color: var(--dark--100);
+  margin-top: 0;
+  margin-bottom: var(--_sizes---space--space-16);
+}
+
+.clients-header-text {
+  color: var(--gray--100);
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0 auto;
+  max-width: 560px;
+}
+
+/* ── Stats row ──────────────────────────────────────── */
+
+.clients-stats {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-bottom: var(--_sizes---space--space-60);
+  padding-bottom: var(--_sizes---space--space-60);
+  border-bottom: 1px solid var(--white--400);
+}
+
+.clients-stat {
+  flex: 0 1 auto;
+  min-width: 180px;
+  padding: 0 48px;
+  text-align: center;
+  border-right: 1px solid var(--white--400);
+}
+
+.clients-stat:last-child {
+  border-right: none;
+}
+
+.clients-stat-number {
+  color: var(--dark--100);
+  font-size: 52px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.clients-stat-label {
+  color: var(--gray--400);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Logo grid ──────────────────────────────────────── */
+
+.clients-grid-label {
+  color: var(--gray--400);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: var(--_sizes---space--space-30);
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--white--400);
+  border-left: 1px solid var(--white--400);
+}
+
+.clients-logo-cell {
+  border-right: 1px solid var(--white--400);
+  border-bottom: 1px solid var(--white--400);
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 26px;
+  background-color: var(--white--100);
+}
+
+.clients-logo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Footer CTA ─────────────────────────────────────── */
+
+.clients-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--_sizes---space--space-60);
+}
+
+.clients-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dark--100);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--dark--100);
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+
+@media screen and (max-width: 991px) {
+  .clients-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .clients-stat {
+    padding: 0 32px;
+    min-width: 150px;
+  }
+
+  .clients-stat-number {
+    font-size: 42px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .clients-area {
+    padding-top: var(--_sizes---space--space-60);
+    padding-bottom: var(--_sizes---space--space-60);
+  }
+
+  .clients-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .clients-stats {
+    gap: 32px 0;
+  }
+
+  .clients-stat {
+    flex: 1 1 33%;
+    min-width: 0;
+    padding: 0 16px;
+  }
+
+  .clients-stat-number {
+    font-size: 34px;
+  }
+
+  .clients-stat-label {
+    font-size: 11px;
+  }
+
+  .clients-logo-cell {
+    padding: 16px 18px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .clients-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .clients-stat {
+    flex: 1 1 50%;
+    border-right: none;
+    padding: 0 8px;
+  }
+}
