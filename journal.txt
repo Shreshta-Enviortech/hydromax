@@ -1,0 +1,700 @@
+===============================================================================
+HYDROMAX WEBSITE — PROJECT JOURNAL
+===============================================================================
+Project    : Hydromax Engineers (operated under Shreshta Envirotech)
+Repository : /Users/sameershaik/Desktop/HydroMax
+Live site  : hydromaxengineers.netlify.app
+Stack      : Static HTML/CSS/JS (Webflow export, no build system)
+Journal    : written 11 August 2026, last updated 16:39
+
+-------------------------------------------------------------------------------
+NOTE ON SOURCES
+-------------------------------------------------------------------------------
+Everything below is reconstructed from git commit history, file modification
+timestamps, and actual file measurements taken from the repository — not from
+memory. Where the record is thin, that is stated plainly rather than filled in.
+
+Verification commands used:
+  git log --pretty=format:'%ad %h %s' --date=format:'%Y-%m-%d %H:%M'
+  git show --stat <commit>
+  ffprobe / du -h on the media files
+
+
+===============================================================================
+PART 1 — TIMELINE
+===============================================================================
+
+-------------------------------------------------------------------------------
+18 APRIL 2026 — PROJECT ORIGIN
+-------------------------------------------------------------------------------
+Commits: 0b7cb35 "Initial commit: Sreshta Envirotech website with updated OG
+                  meta tags"           18:55
+         5eed6c8 "new-changes"          18:58
+
+The project began life as a Webflow export branded "Sreshta Envirotech" — a
+renewable-energy template repurposed for water treatment. Artefacts of that
+origin persisted for months and were only cleared in August (see 11 Aug):
+  - page titles reading "Renewable energy Template"
+  - favicons named favicon.png / webclip.png / sresh2.png
+  - template pages: changelog.html, licenses.html, style-guide.html
+
+Files surviving from this date, untouched since:
+  component-ab93d299-3b29-96eb-810e-55a6992be542.html
+  component-fc638601-a182-5826-3de1-2dd1b1107e78.html
+
+
+-------------------------------------------------------------------------------
+17 MAY 2026 — REBRAND TO HYDROMAX
+-------------------------------------------------------------------------------
+Commit: a4b4571 "Initial commit: HydroMax project files"   14:12
+
+The Sreshta identity gave way to Hydromax. hydro.mp4 was added on this date
+(file mtime 17 May 13:56) as the hero background video. This file became the
+source of the performance problem diagnosed nearly three months later.
+
+
+-------------------------------------------------------------------------------
+21 MAY 2026 — THE BIG BUILD  (largest single day of the project)
+-------------------------------------------------------------------------------
+Four commits between 18:13 and 19:50.
+
+  f166ab8  18:13  "Updated HydroMax pages and pump sections"
+                  46 files changed, 4,997 insertions, 1,265 deletions
+
+This was the day the site took its real shape. What landed:
+
+  NEW PRODUCT PAGES
+    pumps.html               494 lines — became the template for all others
+    watertreatment.html      245 lines
+    Aeriation.html           245 lines
+    Industrialchemicals.html 245 lines
+
+  NEW COMPONENT SYSTEM (CSS)
+    css/mega-nav.css          324 lines — mega dropdown nav w/ image previews
+    css/pump-booster.css      258 lines
+    css/pump-centrifugal.css  212 lines
+    css/pump-showcase.css
+    css/pump-sludge.css
+
+  NEW COMPONENT SYSTEM (JS)
+    js/pump-showcase.js        31 lines — tabbed image + overlay
+    js/pump-booster.js                  — tab panel switching
+    js/pump-centrifugal.js              — scroll-driven card stack
+
+  NEW PARTIALS + TOOLING
+    partials/pump-showcase.html    107 lines
+    partials/pump-booster.html      59 lines
+    partials/pump-centrifugal.html  56 lines
+    partials/pump-sludge.html       31 lines
+    scripts/sync_nav.py            422 lines — nav synchronisation across pages
+
+  REMOVED
+    blog.html                      229 lines deleted
+
+  MEDIA ADDED (this is where the weight came from)
+    videos/p111.gif      35,985,339 bytes  (35 MB)
+    videos/p13.gif       19,934,103 bytes  (20 MB)
+    videos/p12.gif       18,133,277 bytes  (18 MB)
+    videos/ss1.jpg        9,160,447 bytes  (8.8 MB)
+    videos/pump1.mp4      9,842,964 bytes
+    videos/pump.mp4       5,459,029 bytes
+    videos/shlogo.png     1,026,516 bytes
+    videos/logo.png, logo (1).png, nologo.png
+
+    >>> 81.9 MB of media committed in a single commit. Not addressed until
+        11 August 2026.
+
+  0310c83  18:34  "small errors"      — index.html + added videos/shlogo1.png
+  7403cf2  18:40  "updated the poster fail in home page"
+                  index.html, 16 deletions — removed hero video poster markup.
+                  Worth noting: removing the poster is part of why the hero
+                  later showed a blank gap before the first frame.
+  01f2c66  19:50  "removed the aria-live = polite"   index.html, 1 deletion
+
+
+-------------------------------------------------------------------------------
+JUNE 2026 — ESSENTIALLY DORMANT
+-------------------------------------------------------------------------------
+Commit: dc2d191 " modified"   2 June 2026, 18:35
+
+Being straight about this: **no substantive work was done in June.** The single
+June commit changed exactly one file:
+
+    .DS_Store | Bin 10244 -> 10244 bytes
+    1 file changed, 0 insertions(+), 0 deletions(-)
+
+.DS_Store is a macOS Finder metadata file. Zero lines of code, markup, or
+content changed. If real work happened in June it was never committed and left
+no trace in the repository.
+
+Gap in the record: 2 June 2026 -> 11 August 2026 (70 days, no commits).
+
+
+-------------------------------------------------------------------------------
+JULY 2026 — NO ACTIVITY
+-------------------------------------------------------------------------------
+No commits. No files carry a July modification timestamp.
+
+
+-------------------------------------------------------------------------------
+11 AUGUST 2026 — FULL WORKING SESSION  (today)
+-------------------------------------------------------------------------------
+Commit: 7c2aeb8 "updated many things"  16:17
+        (plus further uncommitted work through 16:26 — see PART 3)
+
+Detailed below in PART 2.
+
+
+===============================================================================
+PART 2 — WORK COMPLETED 11 AUGUST 2026, IN DETAIL
+===============================================================================
+
+-------------------------------------------------------------------------------
+2.1  PRODUCT PAGES BUILT OUT
+-------------------------------------------------------------------------------
+Four pages existed only as stubs (banner + one paragraph). Each was rebuilt to
+the full four-section structure of pumps.html, deliberately reusing the
+existing pump-*.css and pump-*.js so no new stylesheets or scripts were needed
+and interactive behaviour stayed consistent.
+
+  watertreatment.html
+    1. Filtration Systems      — Sand/Multi-Media, Activated Carbon,
+                                 Iron & Manganese Removal, Membrane (UF/MF)
+    2. Disinfection Systems    — Chlorination, UV, Ozonation
+    3. Softening/Conditioning  — Ion Exchange, RO, Demineralisation, ZLD
+    4. Quality Management      — Online Analysers, SCADA, Coagulation
+
+  Aeriation.html
+    1. Surface Aeration        — Floating, Brush/Cage, Paddle Wheel, Fountain
+    2. Diffused Aeration       — Fine Bubble, Coarse Bubble, Jet Aerators
+    3. Blower Systems          — PD, Turbo, Centrifugal, Rotary Lobe
+    4. Applications            — SBR, MBR, Lagoon & Pond
+
+  heatingsolution.html
+    1. Heat Exchangers         — Shell & Tube, Plate, Finned Coil, Brazed Plate
+    2. Process Heating         — Electric Immersion, Steam, Thermic Fluid
+    3. Industrial Applications — Process Water, Tank, Heat Tracing, Boiler Feed
+    4. Temperature Control     — Thermostatic, Heat Recovery, Energy Monitoring
+
+  Industrialchemicals.html
+    1. Treatment Chemicals     — Coagulants, Antiscalants, Corrosion
+                                 Inhibitors, Biocides
+    2. Process Chemicals       — pH Adjustment, Defoamers, Polymer Flocculants
+    3. Specialty Chemicals     — RO Cleaners, Boiler, Cooling Tower, Sludge
+    4. Dosing Systems          — Dosing Pumps, Storage, Automated Dosing
+
+
+-------------------------------------------------------------------------------
+2.2  BRAND CONSISTENCY AUDIT — FAVICONS & TITLES
+-------------------------------------------------------------------------------
+Audited all 14 HTML files. Found three different favicons in use plus leftover
+template titles from the April Webflow export.
+
+  BEFORE                                    AFTER
+  images/sresh2.png    (about, contact,     videos/shlogo1.png  (all 12 pages)
+                        service)
+  images/favicon.png   (401, 404,
+                        detail_service, search)
+  videos/shlogo.png    (pumps + 4 product pages)
+
+  TITLES CORRECTED
+    "About "                                   -> "About | Hydromax"
+    "Shreshta -contact"                        -> "Contact | Hydromax"
+    "Service "                                 -> "Services | Hydromax"
+    "Protected page - Renewable energy Template" -> "401 | Hydromax"
+    "Not Found - Renewable energy Template"    -> "404 | Hydromax"
+    ""            (empty)                      -> "Service Detail | Hydromax"
+    "Search Results - Renewable energy Template" -> "Search | Hydromax"
+
+  Note: a sed pass failed here because the replacement text contained the pipe
+  character used as the sed delimiter. Redone in Python with literal string
+  replacement. Verified all 12 files afterwards.
+
+
+-------------------------------------------------------------------------------
+2.3  ABOUT PAGE — STEP-BY-STEP WORKFLOW
+-------------------------------------------------------------------------------
+Replaced four generic placeholder steps (Site Assessment / System Design /
+Panel Installation / Performance Monitor) with the real Hydromax process.
+
+  First attempt: expanded to 7 separate steps. This FAILED visually — see
+  PART 4, Issue 3. Reverted at the client's direction.
+
+  Final structure — 4 steps, with phases nested inside:
+    01  On-call Consultation
+    02  Site Visit
+    03  Execution        - Shop Drawings              (bolded sub-points)
+                         - Civil Execution
+                         - Electro-mechanical Execution
+    04  Site Handover    (includes PCB Documentation, bolded inline)
+
+  Supporting CSS added to hydromax.style.css: .step-list with dash markers,
+  12px gaps, no default list styling.
+  Content later tightened at client request (shorter sub-point copy).
+
+
+-------------------------------------------------------------------------------
+2.4  SERVICES PAGE — REPLACED OFFERING
+-------------------------------------------------------------------------------
+  REMOVED (technology-led)          ADDED (service-led)
+    01 Sequential Batch Reactor       01 Annual Maintenance Contract (AMC)
+    02 Membrane Bio Reactor           02 Technical Consulting
+    03 Moving Bed Biofilm Reactor     03 Drawings Support
+                                      04 PCB Documentation
+                                      05 Replacement of Worn & Tear Parts
+
+  Each carries two tags and a summary, reusing the existing .service-item
+  markup. Placeholder "#" links repointed to contact.html.
+
+
+-------------------------------------------------------------------------------
+2.5  FOOTER ATTRIBUTION — ALL PAGES
+-------------------------------------------------------------------------------
+  FROM: Developed by <a href="https://sameer-shaik.com">Sameer</a>
+  TO:   Developed with <a href="https://zepa.design">zepa</a>
+
+  Applied across 12 files. First pass matched only 4 — the other 8 contained a
+  non-breaking space (\xa0) between "by" and the anchor tag, invisible in the
+  editor. Found by inspecting the raw bytes with repr(), then matched exactly.
+  Verified: 0 files still reference sameer-shaik in the footer.
+
+  A "License" link was appended to the same line across all 13 pages.
+
+
+-------------------------------------------------------------------------------
+2.6  NEW PAGE — license.html
+-------------------------------------------------------------------------------
+Created from scratch with the site's full nav, mega-dropdown, off-canvas menu
+and footer. Content is a single consolidated paragraph covering:
+
+  - © 2026 Hydromax Engineers, all rights reserved
+  - Operated under Shreshta Envirotech, founded and managed by Somesh Vemula
+  - Built exclusively for Hydromax Engineers
+  - Developed with Zepa Inc — zepa.design
+  - Built by Sameer Shaik — www.sameer-shaik.com
+  - IP ownership and reproduction restrictions
+
+  Initially built as six labelled two-column blocks; consolidated into one
+  paragraph at client request.
+
+
+-------------------------------------------------------------------------------
+2.7  NEW SECTION — CLIENTS / LOGO WALL  (index.html)
+-------------------------------------------------------------------------------
+Placed between "Smarter Decisions Through Actionable Insights" and the FAQ.
+New stylesheet: css/clients.css.
+
+  Structure
+    - Eyebrow: "Built for water. Trusted by many."
+    - Heading + intro
+    - Stats row: 35+ Clients | 120+ Projects | 15 Years
+    - 35-logo grid, 5 per row x 7 rows, hairline borders
+    - CTA: "View our services ->" linking to service.html
+
+  Design decisions
+    - Kept site typography (Instrument Sans / Manrope) rather than the
+      monospace of the reference mockup, so it reads as part of the site.
+      Technical feel carried by uppercase letter-spaced labels instead.
+    - Responsive: 5 -> 4 -> 3 -> 2 columns at 991 / 767 / 479px.
+
+  Revisions requested by client
+    - Dark background -> white
+    - All hover states removed entirely
+    - "View our projects" -> "View our services"
+
+  Hero marquee: 13 placeholder brand-*.svg logos replaced with real client
+  logos. Added sizing rules (max-height, object-fit: contain, fixed 118px
+  cell height) because the source PNGs vary widely in aspect ratio.
+
+  Spacing revision (late session)
+    Gap between the stats row and the logo grid was too large. Tightened:
+      .clients-stats  margin-bottom   space-60 -> space-30
+      .clients-stats  padding-bottom  space-60 -> space-40
+      .clients-grid-label margin-bottom space-30 -> space-16
+
+
+-------------------------------------------------------------------------------
+2.8  CONTACT FORM — CONVERTED TO NETLIFY FORMS
+-------------------------------------------------------------------------------
+Objective: form submissions delivered to somesh@sreshtaenviro.com without
+standing up a backend, database or API. Netlify Forms chosen because the site
+already deploys there; approach specified by the client and implemented as
+briefed, with several defects found and corrected along the way.
+
+  ARCHITECTURE
+    Visitor -> HTML form -> Netlify Forms -> stores submission
+                                          -> email notification -> inbox
+    No database, no CMS, no serverless function, no third-party form service.
+
+  DEFECTS FOUND IN THE EXISTING FORM
+    a) method="get"
+       A GET form serialises fields into the URL and never sends a request
+       body. Netlify would have received nothing. Changed to POST.
+
+    b) Dropdown values were untouched Webflow placeholders
+         <option value="Webflow Design">Waste water Treatment</option>
+         <option value="Webflow Development">underground water</option>
+         <option value="Webflow E-commerce">residential water</option>
+       The visible label and the submitted value disagreed completely. Every
+       notification email would have read "Subject: Webflow Design" regardless
+       of what the visitor picked. Values rewritten to match labels.
+
+    c) Duplicate "Subject" label
+       Both the <select> and the <textarea> were labelled "Subject".
+       Textarea relabelled "Message"; placeholder changed from
+       "Enter your message..." to "Tell us about your project...".
+
+    d) Field names unfit for email output
+       name="Number" -> name="phone"
+       name="field"  -> name="subject"
+       name="Message"-> name="message"
+       Netlify prints raw field names in the notification, so these would have
+       arrived as "Number:" and "Field:".
+
+    e) No empty-value guard on the select
+       First option was value="Enter your subject..." — a placeholder that
+       would submit as real data. Changed to value="" plus required, so the
+       browser blocks submission until a real choice is made.
+
+  NETLIFY WIRING ADDED
+    <form name="contact" method="POST" data-netlify="true"
+          data-netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="contact">   <- routes the
+                                                                submission
+    Honeypot field wrapped in .hidden-field, hidden via clip-rect rather than
+    display:none (some bots skip display:none fields, defeating the trap).
+
+  THE NON-OBVIOUS PROBLEM — WEBFLOW INTERCEPTS THE SUBMIT
+    contact.html still loads js/hydromax.js, the exported Webflow runtime.
+    It binds a jQuery submit handler to any form inside a .w-form wrapper and
+    POSTs to Webflow's own endpoint. The wrapper div here carries class
+    "form-main w-form", so Webflow's handler applies.
+
+    Left unaddressed this fails silently and expensively: the form appears to
+    submit, Webflow's success state may even render, and Netlify never
+    receives a single submission. Nothing in the UI would reveal the loss.
+
+    SOLUTION — js/contact-form.js (new file)
+      Registers its submit listener on the CAPTURE phase (addEventListener
+      third argument = true). Capture runs top-down before bubbling, so this
+      handler executes before Webflow's. It then calls:
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+      which prevents Webflow's handler from ever running.
+
+      It then performs the AJAX submission itself:
+        - runs native checkValidity() / reportValidity() first
+        - disables the button, sets label to "Sending..."
+        - builds a urlencoded body from FormData (form-name included)
+        - fetch('/', POST, Content-Type application/x-www-form-urlencoded)
+        - on success: hides the form, reveals the inline success panel,
+          smooth-scrolls it into view
+        - on failure: reveals the error panel, re-enables the button and
+          restores its label
+      Result: no redirect to Netlify's default confirmation page; the
+      designed form UI is preserved.
+
+  COPY CHANGES
+    Heading: "Let's Build Energy Together"
+          -> "Let's Talk About Your Water Project"
+    (the original was inherited from the renewable-energy template and did not
+    describe this business)
+    Error panel now names a fallback address: somesh@sreshtaenviro.com
+
+  SUBJECT OPTIONS (final)
+    Wastewater Treatment | Underground Water | Residential Water |
+    Water Pumps | Annual Maintenance Contract | General Enquiry
+
+  CSS ADDED (inline <style> in contact.html)
+    .hidden-field       honeypot concealment
+    .form-success-tick  40px checkmark
+    .form-success-title 20px semibold heading
+
+  >>> MANUAL STEPS REQUIRED AFTER DEPLOY — NOT YET DONE
+      1. Deploy. Netlify only detects forms by parsing HTML at deploy time,
+         so nothing appears until the new contact.html is live.
+      2. Netlify -> Site -> Forms: confirm a form named "contact" is listed.
+      3. Netlify -> Project configuration -> Notifications ->
+         Emails and webhooks -> Form submission notifications
+         -> add somesh@sreshtaenviro.com
+      Until step 3 is completed, submissions are stored in the Netlify
+      dashboard but no email is sent.
+
+      Because a field is literally named "email", Netlify sets it as the
+      Reply-To on the notification — replying in the inbox goes straight
+      back to the enquirer.
+
+  COST: Netlify's current plans include form submissions free. No paid tier
+        needed at expected enquiry volume.
+
+  FUTURE-PROOFING: if a CMS is added later (Cloudflare Worker + D1 was
+  discussed), the contact form needs no change — it stays on Netlify Forms
+  while blog/projects content moves to the Worker.
+
+
+===============================================================================
+PART 3 — PERFORMANCE AUDIT  (11 August 2026)
+===============================================================================
+Triggered by a live-site report: hero video blank ~5s, then frozen on the first
+frame ~5s. Worked fine on localhost, failed on Netlify — the signature of a
+download-bandwidth problem rather than a code problem.
+
+-------------------------------------------------------------------------------
+3.1  HERO VIDEO
+-------------------------------------------------------------------------------
+  MEASURED (ffprobe):
+    videos/hydro.mp4
+      size       16,376,856 bytes  (16.4 MB)
+      duration   11.934 s
+      resolution 1920x1080, 30fps, h264
+      bitrate    10,978,284 bps  (~11.0 Mbps)
+      audio      none
+
+  DIAGNOSIS
+    ~11 Mbps is near Blu-ray density for a muted decorative background loop.
+    The browser cannot buffer faster than playback consumes, so it stalls,
+    paints a single frame, and stalls again — exactly the reported symptom.
+
+    Also checked the MP4 atom order, since a trailing moov atom forces a full
+    download before first paint and produces identical symptoms:
+      ftyp(32) -> free(8) -> moov(2,541) -> uuid(3,492) -> mdat(16,370,783)
+    moov precedes mdat, so faststart was already correct. Ruled out.
+    Bitrate was the sole cause.
+
+  FIX — re-encoded the same footage, nothing swapped out:
+    -an                       strip audio (element is muted anyway)
+    -c:v libx264 -crf 30 -preset slow
+    -g 60 -keyint_min 60 -sc_threshold 0   keyframe every 2s
+    -movflags +faststart      moov ahead of mdat, verified after encode
+    -pix_fmt yuv420p          Safari/iOS compatibility
+
+                     BEFORE          AFTER
+    size             16.4 MB         3.1 MB      (5.2x smaller)
+    bitrate          11.0 Mbps       2.1 Mbps
+    resolution       1920x1080       1920x1080   (unchanged)
+    duration         11.934 s        11.934 s    (unchanged)
+
+    Output written as videos/hydro-web.mp4. Original hydro.mp4 left in place,
+    so the change is reversible.
+
+    Poster added: videos/hydro-poster.jpg (124 KB), extracted from frame 0 of
+    the video itself — so the still-to-motion transition is seamless. Applied
+    as both the poster attribute and a CSS background-image, giving an instant
+    paint with no blank gap. Wired into index.html and pumps.html.
+
+  ON CLOUDINARY (client asked whether a CDN would fix it)
+    Assessed and advised against for now. Netlify already serves from a CDN,
+    so distribution was not the bottleneck — the file being 5x larger than
+    necessary was. Cloudinary's real value is automatic format negotiation
+    (AV1/WebM per browser) and on-the-fly resizing; worth revisiting if video
+    volume grows, but unnecessary at 3.1 MB.
+
+  WEBM CONSIDERED AND REJECTED
+    Encoded a VP9 version at crf 40: 3.7 MB — larger than the 3.1 MB H.264.
+    Discarded, to avoid browsers selecting the heavier file.
+
+-------------------------------------------------------------------------------
+3.2  PORTFOLIO SECTION — "Pumping Systems Designed To Meet Your Needs"
+-------------------------------------------------------------------------------
+  The heaviest section on the site: 80 MB across four tiles, all committed
+  21 May and untouched since.
+
+  ROOT CAUSE
+    Three tiles were animated GIFs at 1152x648. GIF has no interframe
+    compression — every frame stores as a near-complete image, which is why
+    121-210 frames cost 18-35 MB. The fourth was a 5500x3669 JPEG displayed
+    in an 862px slot: roughly 4x more pixels than can ever be shown.
+
+  RESULTS
+    asset      before              after            reduction
+    p111       35 MB GIF (121f)    338 KB MP4       106x
+    p13        20 MB GIF (210f)    552 KB MP4        36x
+    p12        18 MB GIF (152f)    550 KB MP4        33x
+    ss1.jpg    8.8 MB (5500px)     218 KB (1724px)   41x
+    ---------------------------------------------------------
+    TOTAL      80 MB               1.9 MB           ~42x
+
+  IMPLEMENTATION
+    GIFs became <video autoplay loop muted playsinline preload="metadata">
+    with a poster from each clip's own first frame. Visual behaviour is
+    identical — silent looping motion.
+
+    Required CSS addition (hydromax.style.css):
+      video.portfolio-img { display:block; width:100%; height:auto;
+                            max-width:100%; object-fit:cover; }
+    Necessary because <video> does not inherit the browser's <img> layout
+    defaults — without it the tiles collapse to the 300px default video width.
+    Class names and the reveal-wrap / reveal-frame animation markup untouched.
+
+    ss1.jpg resized to 1724px wide (2x the 862px display slot) as ss1-web.jpg.
+
+-------------------------------------------------------------------------------
+3.3  NET RESULT
+-------------------------------------------------------------------------------
+    Home page media   BEFORE ~96 MB   ->   AFTER ~5 MB
+    All originals retained on disk for comparison or rollback.
+
+-------------------------------------------------------------------------------
+3.4  KNOWN REMAINING ITEM
+-------------------------------------------------------------------------------
+    videos/hydro1.mp4 (9.0 MB) still backs the testimonial video on index.html
+    and service.html. Below the fold, so not render-blocking, but it is the
+    next-largest asset and would benefit from the same treatment.
+
+    Other large unreferenced files sitting in videos/:
+      somu223.mp4  29 MB    sq.mp4      24 MB
+      review.mp4   11 MB    pump1.mp4  9.4 MB
+      somu3.0.mp4 8.6 MB    pump.mp4   5.3 MB
+    Worth auditing for deletion — they inflate the repository and the Netlify
+    deploy without being served.
+
+
+===============================================================================
+PART 4 — PROBLEMS ENCOUNTERED AND HOW THEY WERE RESOLVED
+===============================================================================
+
+ISSUE 1 — sed delimiter collision
+  Symptom : "unknown option to `s'" x7 when rewriting page titles.
+  Cause   : replacement text "About | Hydromax" contained the pipe character
+            being used as the sed s||| delimiter.
+  Fix     : rewrote as Python literal string replacement. Verified all 7.
+
+ISSUE 2 — invisible non-breaking space
+  Symptom : footer replacement matched 4 of 12 files; 8 reported MISMATCH
+            despite the text appearing identical.
+  Cause   : \xa0 (non-breaking space) rather than a normal space between
+            "Developed by" and the <a> tag.
+  Fix     : inspected raw bytes with Python repr(), matched \xa0 explicitly.
+
+ISSUE 3 — 7-step workflow would not animate  (ultimately reverted)
+  Symptom : left timeline dots only filled to 04; steps 05-07 stayed grey and
+            fell out of sync with the right-hand cards while scrolling.
+  Cause   : Webflow's "a-21" step-sticky-animation is a compiled scroll-progress
+            scrubber with keyframes hardcoded for exactly four steps
+            (.step-card._1st/._2nd/._3rd/._4rd at keyframes 42/45/50/54/57/60).
+            Steps 5-7 had no keyframes, so nothing ever targeted them.
+  Attempt 1: js/step-sync.js using scroll listener + CSS classes with
+            !important. Failed — Webflow writes inline styles every frame,
+            which outrank stylesheet rules.
+  Attempt 2: permanent requestAnimationFrame loop overwriting the inline
+            styles directly each frame. Also did not hold.
+  Resolution: client elected to return to 4 steps and nest the extra phases
+            as sub-points inside steps 03 and 04. This works with Webflow's
+            native animation rather than against it — the better outcome, and
+            the reason the current section behaves correctly.
+            step-sync.js removed from about.html.
+
+ISSUE 4 — Webflow runtime would have silently eaten form submissions
+  Symptom : anticipated, not observed — caught by inspection before deploy.
+  Cause   : hydromax.js (Webflow export runtime) binds a submit handler to any
+            form inside .w-form and POSTs to Webflow's endpoint. The contact
+            form's wrapper is class="form-main w-form", so it qualified.
+            Netlify would have received zero submissions while the UI showed
+            apparent success — a silent, invisible failure mode.
+  Fix     : js/contact-form.js listens on the capture phase and calls
+            stopImmediatePropagation(), so Webflow's bubbling handler never
+            executes; the script then performs the fetch() POST to Netlify.
+  Note    : the alternative — stripping the w-form class — was rejected
+            because that class also carries the form's visual styling.
+
+ISSUE 5 — video regression, corrected
+  During the earlier video investigation the hero source had been switched
+  from hydro.mp4 to sq_mp4.mp4 — substituting a different clip rather than
+  fixing the actual one. Client pushed back: "work on the issue, don't change
+  the issue totally." Correct call. Reverted to hydro.mp4 and preload tags
+  stripped from index.html and pumps.html, then the real fix (re-encoding the
+  same footage) was applied in 3.1.
+  Lesson recorded: fix the asset, don't swap the asset.
+
+
+===============================================================================
+PART 5 — CURRENT REPOSITORY STATE  (11 August 2026, 16:26)
+===============================================================================
+
+  Committed today — 7c2aeb8 "updated many things" (16:17)
+    401.html, 404.html, Aeriation.html, Industrialchemicals.html, about.html,
+    contact.html, detail_service.html, heatingsolution.html, index.html,
+    license.html, pumps.html, search.html, service.html, watertreatment.html,
+    css/clients.css, css/hydromax.style.css, js/step-sync.js,
+    images/clients/image1-35 (35 logo files)
+
+  Uncommitted at time of writing (16:39) — performance work + contact form
+    modified:   contact.html             (Netlify form, copy, inline CSS)
+    modified:   css/clients.css          (stats/grid spacing)
+    modified:   css/hydromax.style.css   (video.portfolio-img rule)
+    modified:   index.html               (hero + 4 portfolio tiles)
+    modified:   pumps.html               (banner video)
+    untracked:  js/contact-form.js       AJAX submit + Webflow bypass
+                journal.txt              this file
+                videos/hydro-web.mp4     3.1 MB
+                videos/hydro-poster.jpg  124 KB
+                videos/p111.mp4          338 KB
+                videos/p111-poster.jpg   104 KB
+                videos/p12.mp4           550 KB
+                videos/p12-poster.jpg     60 KB
+                videos/p13.mp4           552 KB
+                videos/p13-poster.jpg     36 KB
+                videos/ss1-web.jpg       218 KB
+
+    >>> ACTION REQUIRED: commit and deploy. Neither the performance gains nor
+        the working contact form are live until these are pushed. The contact
+        form additionally cannot be detected by Netlify until deployed.
+
+  Page inventory (14 HTML files)
+    index.html            home — hero, marquee, portfolio, clients, FAQ
+    about.html            company, team, 4-step workflow
+    service.html          5 services, testimonials
+    contact.html          contact
+    license.html          license & credits              [new, 11 Aug]
+    pumps.html            product — water pumps (template source)
+    watertreatment.html   product                        [built 11 Aug]
+    Aeriation.html        product                        [built 11 Aug]
+    heatingsolution.html  product                        [built 11 Aug]
+    Industrialchemicals.html product                     [built 11 Aug]
+    detail_service.html   service detail
+    search.html           search results
+    401.html / 404.html   error pages
+    component-*.html      x2, Webflow leftovers from April, unused
+
+  Stylesheets
+    normalize.css, hydromax.css, hydromax.style.css, mega-nav.css,
+    clients.css [new], pump-showcase.css, pump-booster.css,
+    pump-centrifugal.css, pump-sludge.css
+
+  Scripts
+    hydromax.js (Webflow bundle), mega-nav.js, pump-showcase.js,
+    pump-booster.js, pump-centrifugal.js, contact-form.js [new],
+    step-sync.js [orphaned, unreferenced]
+
+
+===============================================================================
+PART 6 — RECOMMENDED NEXT STEPS
+===============================================================================
+  1. Commit and deploy the uncommitted work — currently the single
+     highest-value action. Two things are gated on it: the 96 MB -> 5 MB
+     performance gain, and the contact form (Netlify cannot detect a form
+     until its HTML is deployed).
+  2. IMMEDIATELY AFTER DEPLOY — configure the form notification email:
+     Netlify -> Project configuration -> Notifications -> Emails and webhooks
+     -> Form submission notifications -> somesh@sreshtaenviro.com
+     Then send a live test submission and confirm it arrives. Until this is
+     done, enquiries are captured in the dashboard but nobody is alerted.
+  3. Re-encode hydro1.mp4 (9.0 MB) using the same settings as 3.1.
+  4. Audit videos/ for unreferenced files (~87 MB of unused media identified).
+  5. Confirm the Clients section figures — "120+ Projects" and "15 Years" are
+     placeholders; only the 35 client count is grounded in actual assets.
+  6. Add real alt text to the 35 client logos; all currently read
+     "Client logo", which is poor for accessibility and SEO.
+  7. Decide the fate of step-sync.js — unreferenced; delete or keep for
+     reference.
+  8. Sweep remaining "Shreshta"/"Sreshta" copy — still present in some body
+     text and og: meta tags, e.g. index.html og:title. Note the contact email
+     domain is sreshtaenviro.com, so the Shreshta name remains in active use —
+     confirm with the client which brand should appear where.
+  9. Remove Webflow leftovers: component-*.html, templates/changelog.html,
+     templates/licenses.html, templates/style-guide.html.
+
+===============================================================================
+END OF JOURNAL — 11 August 2026
+===============================================================================

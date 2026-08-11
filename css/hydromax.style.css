@@ -569,6 +569,16 @@ blockquote {
   border-radius: var(--_sizes---radius--radius-16);
 }
 
+/* Portfolio tiles converted from GIF to <video>: match <img> layout defaults */
+video.portfolio-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
 .portfolio-top {
   max-width: 630px;
   padding-bottom: var(--_sizes---space--space-60);
@@ -1645,6 +1655,32 @@ blockquote {
   margin-bottom: 0;
 }
 
+.step-list {
+  margin-top: var(--_sizes---space--space-16);
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step-list li {
+  padding-left: 16px;
+  position: relative;
+  font-size: var(--_typography---base--font-size);
+  line-height: var(--_typography---base--line-height);
+  color: var(--dark--100);
+}
+
+.step-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gray--400);
+  font-weight: 600;
+}
+
 .step-line-wrap {
   grid-column-gap: 56px;
   grid-row-gap: 56px;
@@ -2683,6 +2719,61 @@ blockquote {
   background-color: var(--dark--100);
   width: 1px;
   height: 100%;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+/* ── Step-sync overrides (fight Webflow's inline style writes) ── */
+.step-point.step-pt-active {
+  background-color: var(--dark--100) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.step-point.step-pt-active .step-count {
+  color: var(--white--100) !important;
+}
+.step-point.step-pt-inactive {
+  background-color: var(--white--400) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.step-point.step-pt-inactive .step-count {
+  color: var(--gray--200) !important;
+}
+
+/* Active step card gets a dark accent border */
+.step-card.step-card-active {
+  border-right-color: var(--dark--100) !important;
+  border-bottom-color: var(--dark--100) !important;
+  transition: border-color 0.3s ease;
+}
+
+/* Extra step point classes (5th, 6th, 7th) – same base style as 1st–4th */
+.step-point._5th,
+.step-point._6th,
+.step-point._7th {
+  z-index: 99;
+  border-radius: var(--_sizes---radius--radius-100);
+  background-color: var(--white--400);
+  width: 40px;
+  height: 40px;
+  color: var(--gray--200);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+/* Extra step card classes (5th, 6th, 7th) */
+.step-card._5th,
+.step-card._6th,
+.step-card._7th {
+  margin-bottom: var(--_sizes---space--space-24);
+  padding: var(--_sizes---space--space-30);
+  border-right: 3px solid var(--white--100);
+  border-bottom: 3px solid var(--white--100);
+  border-radius: var(--_sizes---space--space-16);
+  background-color: var(--white--100);
+  width: 100%;
+  max-width: 420px;
 }
 
 .dropdown-toggle {
