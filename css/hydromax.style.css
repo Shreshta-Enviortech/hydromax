@@ -569,6 +569,16 @@ blockquote {
   border-radius: var(--_sizes---radius--radius-16);
 }
 
+/* Portfolio tiles converted from GIF to <video>: match <img> layout defaults */
+video.portfolio-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
 .portfolio-top {
   max-width: 630px;
   padding-bottom: var(--_sizes---space--space-60);
