@@ -35,7 +35,7 @@
 
 .clients-eyebrow {
   display: inline-block;
-  color: var(--gray--400);
+  color: var(--dark--100);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -92,7 +92,7 @@
 }
 
 .clients-stat-label {
-  color: var(--gray--400);
+  color: var(--dark--100);
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -103,7 +103,7 @@
 /* ── Logo grid ──────────────────────────────────────── */
 
 .clients-grid-label {
-  color: var(--gray--400);
+  color: var(--dark--100);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.16em;
