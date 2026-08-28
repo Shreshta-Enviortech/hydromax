@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Blog posts | Hydromax Admin</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="../videos/shlogo1.png" rel="shortcut icon" type="image/x-icon">
+  <link href="../css/admin.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ["Instrument Sans:400,500,600,700"] } });</script>
+</head>
+<body class="admin" data-page="posts" data-title="Blog posts">
+  <main id="ad-content">
+    <div class="ad-page-head">
+      <h2>Blog posts</h2>
+      <a class="ad-btn ad-btn-primary" href="post-edit.html">New post</a>
+    </div>
+
+    <div class="ad-toolbar">
+      <input class="ad-input ad-search" id="search" type="search"
+             placeholder="Search by title, slug, category, or status...">
+      <select class="ad-select" id="status-filter" style="width:auto">
+        <option value="">All statuses</option>
+        <option value="published">Published</option>
+        <option value="draft">Draft</option>
+        <option value="archived">Archived</option>
+      </select>
+      <span class="ad-count" id="count"></span>
+    </div>
+
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Publish date</th>
+            <th class="ad-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr><td colspan="6" class="ad-loading">Loading posts...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/admin-shell.js"></script>
+  <script>
+    document.addEventListener('admin:ready', function () {
+      var rowsEl   = document.getElementById('rows');
+      var countEl  = document.getElementById('count');
+      var searchEl = document.getElementById('search');
+      var statusEl = document.getElementById('status-filter');
+      var all = [];
+
+      function render(list) {
+        countEl.textContent = list.length + (list.length === 1 ? ' post' : ' posts');
+
+        if (!list.length) {
+          rowsEl.innerHTML = '<tr><td colspan="6" class="ad-empty">' +
+            (all.length ? 'No posts match your search.' :
+             'No posts yet. Create your first one.') + '</td></tr>';
+          return;
+        }
+
+        rowsEl.innerHTML = list.map(function (p) {
+          return '<tr>' +
+            '<td class="ad-cell-title">' + HM.esc(p.title) + '</td>' +
+            '<td class="ad-cell-mono">' + HM.esc(p.slug) + '</td>' +
+            '<td>' + HM.esc(p.category || '—') + '</td>' +
+            '<td><span class="ad-badge ' + HM.esc(p.status) + '">' + HM.esc(p.status) + '</span></td>' +
+            '<td>' + (HM.formatDate(p.publish_date) || '—') + '</td>' +
+            '<td class="ad-actions">' +
+              '<a href="../blog-post.html?slug=' + encodeURIComponent(p.slug) + '" target="_blank" rel="noopener">View</a>' +
+              '<a href="post-edit.html?id=' + p.id + '">Edit</a>' +
+              '<button class="is-danger" data-del="' + p.id + '" data-title="' + HM.esc(p.title) + '">Delete</button>' +
+            '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function applyFilters() {
+        var q = searchEl.value.trim().toLowerCase();
+        var s = statusEl.value;
+        render(all.filter(function (p) {
+          if (s && p.status !== s) return false;
+          if (!q) return true;
+          return [p.title, p.slug, p.category, p.status, p.author_name]
+            .some(function (f) { return String(f || '').toLowerCase().indexOf(q) !== -1; });
+        }));
+      }
+
+      async function load() {
+        var res = await HM.db.from('blog_posts')
+          .select('id,title,slug,category,status,publish_date,author_name')
+          .order('publish_date', { ascending: false, nullsFirst: false })
+          .order('created_at', { ascending: false });
+
+        if (res.error) {
+          rowsEl.innerHTML = '<tr><td colspan="6" class="ad-empty">Could not load posts: ' +
+                             HM.esc(res.error.message) + '</td></tr>';
+          return;
+        }
+        all = res.data || [];
+        applyFilters();
+      }
+
+      searchEl.addEventListener('input', applyFilters);
+      statusEl.addEventListener('change', applyFilters);
+
+      rowsEl.addEventListener('click', async function (e) {
+        var btn = e.target.closest('[data-del]');
+        if (!btn) return;
+        if (!confirm('Delete "' + btn.getAttribute('data-title') + '"?\n\nThis cannot be undone.')) return;
+
+        var res = await HM.db.from('blog_posts').delete().eq('id', btn.getAttribute('data-del'));
+        if (res.error) { HM.toast('Delete failed: ' + res.error.message, true); return; }
+        HM.toast('Post deleted');
+        load();
+      });
+
+      load();
+    });
+  </script>
+</body>
+</html>

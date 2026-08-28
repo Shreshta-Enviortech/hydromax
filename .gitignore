@@ -1,0 +1,49 @@
+# ============================================================================
+# Hydromax — git ignore
+# ============================================================================
+
+# ---- Secrets --------------------------------------------------------------
+# NEVER commit these. The sb_secret_ / service_role key bypasses every RLS
+# policy — anyone holding it can read, edit, or delete the entire database.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.json
+
+# ---- Internal notes -------------------------------------------------------
+# Working journal — internal record, not part of the deployed site.
+journal.txt
+
+# ---- macOS ----------------------------------------------------------------
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# ---- Editors --------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- Node (if a build step is ever added) ---------------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.cache/
+dist/
+.netlify/
+
+# ---- Incomplete downloads / scratch ---------------------------------------
+*.crdownload
+*.part
+*.download
+Unconfirmed*.crdownload
+
+# ---- Logs -----------------------------------------------------------------
+*.log

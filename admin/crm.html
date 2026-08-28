@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CRM | Hydromax Admin</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="../videos/shlogo1.png" rel="shortcut icon" type="image/x-icon">
+  <link href="../css/admin.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ["Instrument Sans:400,500,600,700"] } });</script>
+  <style>
+    .crm-modal-bg {
+      position: fixed; inset: 0; background: rgba(15,23,42,.45);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 20px; overflow-y: auto; z-index: 100;
+    }
+    .crm-modal {
+      background: #fff; border-radius: 10px; width: 100%; max-width: 560px;
+      padding: 26px 28px; box-shadow: 0 12px 40px rgba(15,23,42,.2);
+    }
+    .crm-modal h3 { margin: 0 0 18px; font-size: 18px; }
+  </style>
+</head>
+<body class="admin" data-page="accounts" data-title="CRM">
+  <main id="ad-content">
+    <div class="ad-page-head">
+      <h2 id="head">CRM</h2>
+      <button class="ad-btn ad-btn-primary" id="new-btn">New record</button>
+    </div>
+
+    <div class="ad-toolbar">
+      <input class="ad-input ad-search" id="search" type="search" placeholder="Search...">
+      <span class="ad-count" id="count"></span>
+    </div>
+
+    <div class="ad-error" id="error" style="display:none"></div>
+
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr id="head-row"></tr></thead>
+        <tbody id="rows"><tr><td class="ad-loading">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/admin-shell.js"></script>
+  <script>
+  document.addEventListener('admin:ready', function () {
+
+    /* Field types: text | email | tel | textarea | number | date | select */
+    var SCHEMA = {
+      accounts: {
+        label: 'Accounts', singular: 'Account',
+        columns: ['name','industry','phone','website'],
+        fields: [
+          { k:'name',     label:'Account name', type:'text', required:true },
+          { k:'industry', label:'Industry',     type:'text' },
+          { k:'website',  label:'Website',      type:'text' },
+          { k:'phone',    label:'Phone',        type:'tel' },
+          { k:'address',  label:'Address',      type:'textarea' },
+          { k:'notes',    label:'Notes',        type:'textarea' }
+        ]
+      },
+      contacts: {
+        label: 'Contacts', singular: 'Contact',
+        columns: ['first_name','last_name','email','phone','job_title'],
+        fields: [
+          { k:'first_name', label:'First name', type:'text', required:true },
+          { k:'last_name',  label:'Last name',  type:'text' },
+          { k:'email',      label:'Email',      type:'email' },
+          { k:'phone',      label:'Phone',      type:'tel' },
+          { k:'job_title',  label:'Job title',  type:'text' },
+          { k:'notes',      label:'Notes',      type:'textarea' }
+        ]
+      },
+      leads: {
+        label: 'Leads', singular: 'Lead',
+        columns: ['name','company','email','phone','source','status'],
+        badge: 'status',
+        fields: [
+          { k:'name',    label:'Name',    type:'text', required:true },
+          { k:'company', label:'Company', type:'text' },
+          { k:'email',   label:'Email',   type:'email' },
+          { k:'phone',   label:'Phone',   type:'tel' },
+          { k:'source',  label:'Source',  type:'text', placeholder:'website-form, referral, call...' },
+          { k:'status',  label:'Status',  type:'select',
+            options:['new','contacted','qualified','unqualified','converted'] },
+          { k:'notes',   label:'Notes',   type:'textarea' }
+        ]
+      },
+      deals: {
+        label: 'Deals', singular: 'Deal',
+        columns: ['title','value','stage','expected_close'],
+        badge: 'stage',
+        fields: [
+          { k:'title',          label:'Deal title',     type:'text', required:true },
+          { k:'value',          label:'Value (INR)',    type:'number' },
+          { k:'stage',          label:'Stage',          type:'select',
+            options:['enquiry','site-visit','quotation','negotiation','won','lost'] },
+          { k:'expected_close', label:'Expected close', type:'date' },
+          { k:'notes',          label:'Notes',          type:'textarea' }
+        ]
+      },
+      tasks: {
+        label: 'Tasks', singular: 'Task',
+        columns: ['title','due_date','priority','status'],
+        badge: 'status',
+        fields: [
+          { k:'title',       label:'Task',        type:'text', required:true },
+          { k:'description', label:'Description', type:'textarea' },
+          { k:'due_date',    label:'Due date',    type:'date' },
+          { k:'priority',    label:'Priority',    type:'select', options:['low','medium','high'] },
+          { k:'status',      label:'Status',      type:'select',
+            options:['open','in-progress','done','cancelled'] }
+        ]
+      }
+    };
+
+    var table = new URLSearchParams(window.location.search).get('t') || 'accounts';
+    if (!SCHEMA[table]) table = 'accounts';
+    var cfg = SCHEMA[table];
+    var all = [];
+
+    document.body.setAttribute('data-page', table);
+    document.getElementById('head').textContent = cfg.label;
+    document.querySelector('.ad-topbar h1').textContent = 'CRM — ' + cfg.label;
+    document.getElementById('new-btn').textContent = 'New ' + cfg.singular.toLowerCase();
+    document.getElementById('search').placeholder = 'Search ' + cfg.label.toLowerCase() + '...';
+    var link = document.querySelector('.ad-nav a[href="crm.html?t=' + table + '"]');
+    if (link) link.classList.add('is-active');
+
+    function pretty(k) { return k.replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
+
+    document.getElementById('head-row').innerHTML =
+      cfg.columns.map(function (c) { return '<th>' + pretty(c) + '</th>'; }).join('') +
+      '<th class="ad-actions">Actions</th>';
+
+    function cell(row, key) {
+      var v = row[key];
+      if (v === null || v === undefined || v === '') return '—';
+      if (key === cfg.badge) return '<span class="ad-badge ' + HM.esc(v) + '">' + HM.esc(v) + '</span>';
+      if (key === 'value')   return '₹' + Number(v).toLocaleString('en-IN');
+      if (/date$/.test(key)) return HM.formatDate(v);
+      return HM.esc(v);
+    }
+
+    function render(list) {
+      var rows = document.getElementById('rows');
+      document.getElementById('count').textContent =
+        list.length + ' ' + (list.length === 1 ? cfg.singular.toLowerCase() : cfg.label.toLowerCase());
+
+      if (!list.length) {
+        rows.innerHTML = '<tr><td colspan="' + (cfg.columns.length + 1) + '" class="ad-empty">' +
+          (all.length ? 'No records match your search.' : 'No ' + cfg.label.toLowerCase() + ' yet.') + '</td></tr>';
+        return;
+      }
+      rows.innerHTML = list.map(function (r) {
+        return '<tr>' +
+          cfg.columns.map(function (c) { return '<td>' + cell(r, c) + '</td>'; }).join('') +
+          '<td class="ad-actions">' +
+            '<button data-edit="' + r.id + '">Edit</button>' +
+            '<button class="is-danger" data-del="' + r.id + '">Delete</button>' +
+          '</td></tr>';
+      }).join('');
+    }
+
+    function applySearch() {
+      var q = document.getElementById('search').value.trim().toLowerCase();
+      if (!q) return render(all);
+      render(all.filter(function (r) {
+        return Object.keys(r).some(function (k) {
+          return String(r[k] == null ? '' : r[k]).toLowerCase().indexOf(q) !== -1;
+        });
+      }));
+    }
+
+    async function load() {
+      var res = await HM.db.from(table).select('*').order('created_at', { ascending: false });
+      if (res.error) {
+        document.getElementById('error').textContent = 'Could not load: ' + res.error.message;
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('rows').innerHTML = '';
+        return;
+      }
+      all = res.data || [];
+      applySearch();
+    }
+
+    /* ── Modal form ─────────────────────────────────────────────── */
+    function openForm(record) {
+      var isEdit = !!record;
+      var body = cfg.fields.map(function (f) {
+        var v = record ? (record[f.k] == null ? '' : record[f.k]) : '';
+        if (f.type === 'date' && v) v = String(v).slice(0, 10);
+        var input;
+        if (f.type === 'textarea') {
+          input = '<textarea class="ad-textarea" id="f_' + f.k + '" rows="3">' + HM.esc(v) + '</textarea>';
+        } else if (f.type === 'select') {
+          input = '<select class="ad-select" id="f_' + f.k + '">' + f.options.map(function (o) {
+            return '<option value="' + o + '"' + (String(v) === o ? ' selected' : '') + '>' + o + '</option>';
+          }).join('') + '</select>';
+        } else {
+          input = '<input class="ad-input" id="f_' + f.k + '" type="' + f.type + '" value="' +
+                  HM.esc(v) + '"' + (f.placeholder ? ' placeholder="' + HM.esc(f.placeholder) + '"' : '') +
+                  (f.required ? ' required' : '') + '>';
+        }
+        return '<div class="ad-field"><label for="f_' + f.k + '">' + f.label +
+               (f.required ? ' *' : '') + '</label>' + input + '</div>';
+      }).join('');
+
+      var bg = document.createElement('div');
+      bg.className = 'crm-modal-bg';
+      bg.innerHTML = '<div class="crm-modal"><h3>' + (isEdit ? 'Edit ' : 'New ') +
+        cfg.singular.toLowerCase() + '</h3><div class="ad-error" id="m-err" style="display:none"></div>' +
+        body + '<div class="ad-btn-row"><button class="ad-btn ad-btn-primary" id="m-save">Save</button>' +
+        '<button class="ad-btn ad-btn-ghost" id="m-cancel">Cancel</button></div></div>';
+      document.body.appendChild(bg);
+
+      function close() { bg.remove(); }
+      bg.addEventListener('click', function (e) { if (e.target === bg) close(); });
+      bg.querySelector('#m-cancel').addEventListener('click', close);
+
+      bg.querySelector('#m-save').addEventListener('click', async function () {
+        var payload = {}, missing = null;
+        cfg.fields.forEach(function (f) {
+          var el = bg.querySelector('#f_' + f.k);
+          var val = el.value.trim();
+          if (f.required && !val) missing = missing || f.label;
+          if (f.type === 'number') payload[f.k] = val ? Number(val) : null;
+          else payload[f.k] = val || null;
+        });
+        if (missing) {
+          var me = bg.querySelector('#m-err');
+          me.textContent = missing + ' is required.'; me.style.display = 'block';
+          return;
+        }
+        var btn = bg.querySelector('#m-save');
+        btn.disabled = true; btn.textContent = 'Saving...';
+
+        var res = isEdit
+          ? await HM.db.from(table).update(payload).eq('id', record.id)
+          : await HM.db.from(table).insert(payload);
+
+        if (res.error) {
+          var e2 = bg.querySelector('#m-err');
+          e2.textContent = res.error.message; e2.style.display = 'block';
+          btn.disabled = false; btn.textContent = 'Save';
+          return;
+        }
+        HM.toast(cfg.singular + ' saved');
+        close(); load();
+      });
+    }
+
+    document.getElementById('new-btn').addEventListener('click', function () { openForm(null); });
+    document.getElementById('search').addEventListener('input', applySearch);
+
+    document.getElementById('rows').addEventListener('click', async function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.edit) {
+        openForm(all.filter(function (r) { return r.id === b.dataset.edit; })[0]);
+      }
+      if (b.dataset.del) {
+        if (!confirm('Delete this ' + cfg.singular.toLowerCase() + '? This cannot be undone.')) return;
+        var res = await HM.db.from(table).delete().eq('id', b.dataset.del);
+        if (res.error) { HM.toast('Delete failed: ' + res.error.message, true); return; }
+        HM.toast('Deleted'); load();
+      }
+    });
+
+    load();
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Login | Hydromax</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="../videos/shlogo1.png" rel="shortcut icon" type="image/x-icon">
+  <link href="../css/admin.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ["Instrument Sans:400,500,600,700"] } });</script>
+</head>
+<body class="admin">
+  <div class="ad-login-wrap">
+    <form class="ad-login" id="login-form">
+      <h1>Hydromax Admin</h1>
+      <p class="sub">Sign in to manage content and CRM.</p>
+
+      <div class="ad-error" id="error" style="display:none"></div>
+
+      <div class="ad-field">
+        <label for="email">Email</label>
+        <input class="ad-input" type="email" id="email" name="email" required autocomplete="username">
+      </div>
+
+      <div class="ad-field">
+        <label for="password">Password</label>
+        <input class="ad-input" type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+
+      <button class="ad-btn ad-btn-primary" type="submit" id="submit">Sign in</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('login-form');
+      var errEl = document.getElementById('error');
+      var btn = document.getElementById('submit');
+
+      function nextPage() {
+        var m = /[?&]next=([^&]+)/.exec(window.location.search);
+        var target = m ? decodeURIComponent(m[1]) : 'dashboard.html';
+        // only allow same-folder targets — never an attacker-supplied URL
+        if (!/^[a-z0-9._-]+\.html$/i.test(target)) target = 'dashboard.html';
+        return target;
+      }
+
+      // Already signed in? Skip the form.
+      HM.getSession().then(function (session) {
+        if (session) window.location.replace(nextPage());
+      });
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        errEl.style.display = 'none';
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+
+        var res = await HM.signIn(
+          document.getElementById('email').value.trim(),
+          document.getElementById('password').value
+        );
+
+        if (res.error) {
+          errEl.textContent = res.error.message || 'Sign in failed.';
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Sign in';
+          return;
+        }
+        window.location.replace(nextPage());
+      });
+    })();
+  </script>
+</body>
+</html>

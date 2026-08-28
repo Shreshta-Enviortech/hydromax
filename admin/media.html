@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Blog media | Hydromax Admin</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="../videos/shlogo1.png" rel="shortcut icon" type="image/x-icon">
+  <link href="../css/admin.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ["Instrument Sans:400,500,600,700"] } });</script>
+</head>
+<body class="admin" data-page="media" data-title="Blog media">
+  <main id="ad-content">
+    <div class="ad-page-head">
+      <div>
+        <h2>Blog media</h2>
+        <p style="color:var(--ad-ink-soft);margin:6px 0 0;font-size:14.5px">
+          Images in the <code>blog-media</code> bucket. Copy a URL to use it inside post content.
+        </p>
+      </div>
+      <label class="ad-btn ad-btn-primary" style="cursor:pointer">
+        Upload images
+        <input type="file" id="upload" accept="image/*" multiple hidden>
+      </label>
+    </div>
+
+    <div class="ad-media-grid" id="grid" style="max-height:none">
+      <div class="ad-loading">Loading media...</div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/admin-shell.js"></script>
+  <script>
+    document.addEventListener('admin:ready', function () {
+      var grid = document.getElementById('grid');
+
+      async function load() {
+        try {
+          var files = await HM.listImages();
+          if (!files.length) {
+            grid.innerHTML = '<div class="ad-empty">No images yet. Upload your first one.</div>';
+            return;
+          }
+          grid.innerHTML = files.map(function (f) {
+            return '<div class="ad-media-item">' +
+              '<img src="' + HM.esc(f.url) + '" alt="' + HM.esc(f.name) + '" loading="lazy">' +
+              '<div class="ad-media-tools">' +
+                '<button data-copy="' + HM.esc(f.url) + '">Copy URL</button>' +
+                '<button class="is-danger" data-rm="' + HM.esc(f.name) + '">Delete</button>' +
+              '</div></div>';
+          }).join('');
+        } catch (err) {
+          grid.innerHTML = '<div class="ad-empty">' + HM.esc(err.message) + '</div>';
+        }
+      }
+
+      document.getElementById('upload').addEventListener('change', async function (e) {
+        var files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        HM.toast('Uploading ' + files.length + ' image' + (files.length > 1 ? 's' : '') + '...');
+        for (var i = 0; i < files.length; i++) {
+          try { await HM.uploadImage(files[i]); }
+          catch (err) { HM.toast('Failed on ' + files[i].name + ': ' + err.message, true); }
+        }
+        HM.toast('Upload complete');
+        e.target.value = '';
+        load();
+      });
+
+      grid.addEventListener('click', async function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        if (b.dataset.copy) {
+          try { await navigator.clipboard.writeText(b.dataset.copy); HM.toast('URL copied'); }
+          catch (_) { window.prompt('Copy this URL:', b.dataset.copy); }
+        }
+        if (b.dataset.rm) {
+          if (!confirm('Delete ' + b.dataset.rm + '?\n\nPosts using this image will show a broken image.')) return;
+          try { await HM.deleteImage(b.dataset.rm); HM.toast('Deleted'); load(); }
+          catch (err) { HM.toast('Delete failed: ' + err.message, true); }
+        }
+      });
+
+      load();
+    });
+  </script>
+</body>
+</html>
