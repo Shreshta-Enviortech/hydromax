@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edit post | Hydromax Admin</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="../videos/shlogo1.png" rel="shortcut icon" type="image/x-icon">
+  <link href="../css/admin.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ["Instrument Sans:400,500,600,700"] } });</script>
+</head>
+<body class="admin" data-page="posts" data-title="Edit post">
+  <main id="ad-content">
+    <div class="ad-content-narrow">
+      <div class="ad-page-head">
+        <h2 id="head">New post</h2>
+        <div class="ad-btn-row">
+          <a class="ad-btn ad-btn-ghost" href="posts.html">Back to posts</a>
+          <button class="ad-btn ad-btn-primary" id="save">Save post</button>
+        </div>
+      </div>
+
+      <div class="ad-error" id="error" style="display:none"></div>
+
+      <form id="form">
+        <!-- ── Content ───────────────────────────────────────────── -->
+        <div class="ad-fieldset">
+          <h3>Content</h3>
+
+          <div class="ad-field">
+            <label for="title">Title</label>
+            <input class="ad-input" id="title" required>
+          </div>
+
+          <div class="ad-field">
+            <label for="slug">Slug</label>
+            <input class="ad-input" id="slug" required>
+            <div class="ad-hint">
+              URL path, e.g. <code>why-stp-maintenance-matters</code>.
+              Auto-filled from the title until you edit it.
+            </div>
+          </div>
+
+          <div class="ad-field">
+            <label for="excerpt">Excerpt</label>
+            <textarea class="ad-textarea" id="excerpt" rows="3"
+                      placeholder="Short summary shown on blog cards and in search results."></textarea>
+          </div>
+
+          <div class="ad-row">
+            <div class="ad-field">
+              <label for="category">Category</label>
+              <input class="ad-input" id="category" list="category-list"
+                     placeholder="e.g. Wastewater">
+              <datalist id="category-list"></datalist>
+            </div>
+            <div class="ad-field">
+              <label for="content_format">Content format</label>
+              <select class="ad-select" id="content_format">
+                <option value="markdown">Markdown</option>
+                <option value="html">HTML</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="ad-field">
+            <label for="content">Content</label>
+            <textarea class="ad-textarea ad-textarea-lg" id="content"
+                      placeholder="Write in Markdown (## Heading, **bold**, - list) or switch the format to HTML."></textarea>
+            <div class="ad-hint" id="readtime-hint">—</div>
+          </div>
+        </div>
+
+        <!-- ── Featured image ────────────────────────────────────── -->
+        <div class="ad-fieldset">
+          <h3>Featured image</h3>
+
+          <div class="ad-field">
+            <label for="featured_image_url">Featured image URL</label>
+            <input class="ad-input" id="featured_image_url"
+                   placeholder="https://... or upload below">
+            <div class="ad-hint">Used on the blog listing and cards. Upload a file or paste any full image URL.</div>
+            <img class="ad-thumb-preview" id="thumb" alt="" style="display:none">
+          </div>
+
+          <div class="ad-btn-row">
+            <label class="ad-btn ad-btn-sm" style="cursor:pointer">
+              Upload image
+              <input type="file" id="upload" accept="image/*" hidden>
+            </label>
+            <button type="button" class="ad-btn ad-btn-sm ad-btn-ghost" id="browse">Browse media</button>
+            <button type="button" class="ad-btn ad-btn-sm ad-btn-ghost" id="clear-img">Clear</button>
+          </div>
+
+          <div id="media-panel" style="display:none">
+            <div class="ad-hint" style="margin-top:14px">
+              Click <strong>Use</strong> to set as featured image, or <strong>Copy</strong> to paste the
+              URL into your content.
+            </div>
+            <div class="ad-media-grid" id="media-grid"></div>
+          </div>
+        </div>
+
+        <!-- ── Meta ──────────────────────────────────────────────── -->
+        <div class="ad-fieldset">
+          <h3>Meta</h3>
+
+          <div class="ad-row">
+            <div class="ad-field">
+              <label for="author_name">Author name</label>
+              <input class="ad-input" id="author_name" placeholder="Somesh Vemula">
+            </div>
+            <div class="ad-field">
+              <label for="author_role">Author role</label>
+              <input class="ad-input" id="author_role" placeholder="Founder &amp; Managing Director">
+            </div>
+          </div>
+
+          <div class="ad-row-3">
+            <div class="ad-field">
+              <label for="status">Status</label>
+              <select class="ad-select" id="status">
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+            <div class="ad-field">
+              <label for="publish_date">Publish date</label>
+              <input class="ad-input" id="publish_date" type="date">
+            </div>
+            <div class="ad-field">
+              <label for="read_time_minutes">Read time (minutes)</label>
+              <input class="ad-input" id="read_time_minutes" type="number" min="1" placeholder="auto">
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SEO ───────────────────────────────────────────────── -->
+        <div class="ad-fieldset">
+          <h3>SEO</h3>
+          <div class="ad-field">
+            <label for="seo_title">Meta title</label>
+            <input class="ad-input" id="seo_title" maxlength="70"
+                   placeholder="Defaults to the post title">
+            <div class="ad-hint"><span id="seo-title-count">0</span>/70 characters</div>
+          </div>
+          <div class="ad-field">
+            <label for="seo_description">Meta description</label>
+            <textarea class="ad-textarea" id="seo_description" rows="3" maxlength="160"
+                      placeholder="Defaults to the excerpt"></textarea>
+            <div class="ad-hint"><span id="seo-desc-count">0</span>/160 characters</div>
+          </div>
+        </div>
+
+        <div class="ad-btn-row" style="margin-bottom:40px">
+          <button class="ad-btn ad-btn-primary" id="save2" type="button">Save post</button>
+          <a class="ad-btn ad-btn-ghost" href="posts.html">Cancel</a>
+          <a class="ad-btn ad-btn-ghost" id="view-live" target="_blank" rel="noopener" style="display:none">View live</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/admin-shell.js"></script>
+  <script>
+  document.addEventListener('admin:ready', function () {
+    var params  = new URLSearchParams(window.location.search);
+    var postId  = params.get('id');
+    var errEl   = document.getElementById('error');
+    var slugTouched = false;
+
+    var F = {};
+    ['title','slug','excerpt','category','content_format','content','featured_image_url',
+     'author_name','author_role','status','publish_date','read_time_minutes',
+     'seo_title','seo_description'].forEach(function (k) { F[k] = document.getElementById(k); });
+
+    /* ── Slug auto-fill ─────────────────────────────────────────── */
+    F.slug.addEventListener('input', function () { slugTouched = true; });
+    F.title.addEventListener('input', function () {
+      if (!slugTouched) F.slug.value = HM.slugify(F.title.value);
+    });
+
+    /* ── Read time hint ─────────────────────────────────────────── */
+    F.content.addEventListener('input', function () {
+      var mins = HM.readTime(F.content.value);
+      var words = F.content.value.trim().split(/\s+/).filter(Boolean).length;
+      document.getElementById('readtime-hint').textContent =
+        words + ' words · about ' + mins + ' min read' +
+        (F.read_time_minutes.value ? '' : ' (will be saved automatically)');
+    });
+
+    /* ── SEO counters ───────────────────────────────────────────── */
+    function bindCount(input, out) {
+      var el = document.getElementById(out);
+      function upd() { el.textContent = input.value.length; }
+      input.addEventListener('input', upd); upd();
+    }
+    bindCount(F.seo_title, 'seo-title-count');
+    bindCount(F.seo_description, 'seo-desc-count');
+
+    /* ── Featured image ─────────────────────────────────────────── */
+    var thumb = document.getElementById('thumb');
+    function showThumb() {
+      if (F.featured_image_url.value.trim()) {
+        thumb.src = F.featured_image_url.value.trim();
+        thumb.style.display = 'block';
+      } else {
+        thumb.style.display = 'none';
+      }
+    }
+    F.featured_image_url.addEventListener('input', showThumb);
+    document.getElementById('clear-img').addEventListener('click', function () {
+      F.featured_image_url.value = ''; showThumb();
+    });
+
+    document.getElementById('upload').addEventListener('change', async function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      HM.toast('Uploading...');
+      try {
+        F.featured_image_url.value = await HM.uploadImage(file);
+        showThumb();
+        HM.toast('Image uploaded');
+        if (mediaOpen) loadMedia();
+      } catch (err) {
+        HM.toast('Upload failed: ' + err.message, true);
+      }
+      e.target.value = '';
+    });
+
+    var mediaOpen = false;
+    var panel = document.getElementById('media-panel');
+    var grid  = document.getElementById('media-grid');
+
+    document.getElementById('browse').addEventListener('click', function () {
+      mediaOpen = !mediaOpen;
+      panel.style.display = mediaOpen ? 'block' : 'none';
+      if (mediaOpen) loadMedia();
+    });
+
+    async function loadMedia() {
+      grid.innerHTML = '<div class="ad-loading" style="padding:20px">Loading media...</div>';
+      try {
+        var files = await HM.listImages();
+        if (!files.length) { grid.innerHTML = '<div class="ad-empty" style="padding:20px">No images uploaded yet.</div>'; return; }
+        grid.innerHTML = files.map(function (f) {
+          return '<div class="ad-media-item">' +
+            '<img src="' + HM.esc(f.url) + '" alt="' + HM.esc(f.name) + '" loading="lazy">' +
+            '<div class="ad-media-tools">' +
+              '<button type="button" data-use="' + HM.esc(f.url) + '">Use</button>' +
+              '<button type="button" data-copy="' + HM.esc(f.url) + '">Copy</button>' +
+              '<button type="button" class="is-danger" data-rm="' + HM.esc(f.name) + '">Del</button>' +
+            '</div></div>';
+        }).join('');
+      } catch (err) {
+        grid.innerHTML = '<div class="ad-empty" style="padding:20px">' + HM.esc(err.message) + '</div>';
+      }
+    }
+
+    grid.addEventListener('click', async function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.use)  { F.featured_image_url.value = b.dataset.use; showThumb(); HM.toast('Set as featured image'); }
+      if (b.dataset.copy) {
+        try { await navigator.clipboard.writeText(b.dataset.copy); HM.toast('URL copied'); }
+        catch (_) { window.prompt('Copy this URL:', b.dataset.copy); }
+      }
+      if (b.dataset.rm) {
+        if (!confirm('Delete ' + b.dataset.rm + ' from storage?')) return;
+        try { await HM.deleteImage(b.dataset.rm); HM.toast('Image deleted'); loadMedia(); }
+        catch (err) { HM.toast('Delete failed: ' + err.message, true); }
+      }
+    });
+
+    /* ── Category suggestions ───────────────────────────────────── */
+    (async function () {
+      var res = await HM.db.from('blog_posts').select('category').not('category', 'is', null);
+      if (res.error) return;
+      var seen = {};
+      (res.data || []).forEach(function (r) { if (r.category) seen[r.category] = 1; });
+      document.getElementById('category-list').innerHTML =
+        Object.keys(seen).map(function (c) { return '<option value="' + HM.esc(c) + '">'; }).join('');
+    })();
+
+    /* ── Load existing post ─────────────────────────────────────── */
+    async function load() {
+      if (!postId) {
+        F.status.value = 'draft';
+        F.publish_date.value = new Date().toISOString().slice(0, 10);
+        return;
+      }
+      document.getElementById('head').textContent = 'Edit post';
+      var res = await HM.db.from('blog_posts').select('*').eq('id', postId).single();
+      if (res.error) {
+        errEl.textContent = 'Could not load post: ' + res.error.message;
+        errEl.style.display = 'block';
+        return;
+      }
+      var p = res.data;
+      slugTouched = true;
+      Object.keys(F).forEach(function (k) {
+        if (p[k] === null || p[k] === undefined) return;
+        F[k].value = (k === 'publish_date') ? String(p[k]).slice(0, 10) : p[k];
+      });
+      showThumb();
+      F.content.dispatchEvent(new Event('input'));
+      bindCount(F.seo_title, 'seo-title-count');
+      bindCount(F.seo_description, 'seo-desc-count');
+
+      var live = document.getElementById('view-live');
+      live.href = '../blog-post.html?slug=' + encodeURIComponent(p.slug);
+      live.style.display = 'inline-flex';
+    }
+
+    /* ── Save ───────────────────────────────────────────────────── */
+    async function save() {
+      errEl.style.display = 'none';
+
+      if (!F.title.value.trim()) { errEl.textContent = 'Title is required.'; errEl.style.display = 'block'; F.title.focus(); return; }
+      if (!F.slug.value.trim())  { F.slug.value = HM.slugify(F.title.value); }
+
+      var payload = {
+        title:              F.title.value.trim(),
+        slug:               HM.slugify(F.slug.value),
+        excerpt:            F.excerpt.value.trim() || null,
+        category:           F.category.value.trim() || null,
+        content:            F.content.value,
+        content_format:     F.content_format.value,
+        featured_image_url: F.featured_image_url.value.trim() || null,
+        author_name:        F.author_name.value.trim() || null,
+        author_role:        F.author_role.value.trim() || null,
+        status:             F.status.value,
+        publish_date:       F.publish_date.value ? new Date(F.publish_date.value).toISOString() : null,
+        read_time_minutes:  F.read_time_minutes.value ? parseInt(F.read_time_minutes.value, 10)
+                                                      : HM.readTime(F.content.value),
+        seo_title:          F.seo_title.value.trim() || null,
+        seo_description:    F.seo_description.value.trim() || null
+      };
+
+      var btns = [document.getElementById('save'), document.getElementById('save2')];
+      btns.forEach(function (b) { b.disabled = true; b.textContent = 'Saving...'; });
+
+      var res = postId
+        ? await HM.db.from('blog_posts').update(payload).eq('id', postId).select().single()
+        : await HM.db.from('blog_posts').insert(payload).select().single();
+
+      btns.forEach(function (b) { b.disabled = false; b.textContent = 'Save post'; });
+
+      if (res.error) {
+        errEl.textContent = res.error.code === '23505'
+          ? 'That slug is already used by another post. Change the slug and try again.'
+          : 'Save failed: ' + res.error.message;
+        errEl.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      HM.toast('Post saved');
+      if (!postId) {
+        window.location.replace('post-edit.html?id=' + res.data.id);
+      }
+    }
+
+    document.getElementById('save').addEventListener('click', function (e) { e.preventDefault(); save(); });
+    document.getElementById('save2').addEventListener('click', function (e) { e.preventDefault(); save(); });
+    document.getElementById('form').addEventListener('submit', function (e) { e.preventDefault(); save(); });
+
+    load();
+  });
+  </script>
+</body>
+</html>

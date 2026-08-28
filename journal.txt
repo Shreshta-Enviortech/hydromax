@@ -5,7 +5,7 @@ Project    : Hydromax Engineers (operated under Shreshta Envirotech)
 Repository : /Users/sameershaik/Desktop/HydroMax
 Live site  : hydromaxengineers.netlify.app
 Stack      : Static HTML/CSS/JS (Webflow export, no build system)
-Journal    : written 11 August 2026, last updated 16:39
+Journal    : written 11 August 2026, last updated 28 August 2026 12:16
 
 -------------------------------------------------------------------------------
 NOTE ON SOURCES
@@ -696,5 +696,268 @@ PART 6 — RECOMMENDED NEXT STEPS
      templates/licenses.html, templates/style-guide.html.
 
 ===============================================================================
-END OF JOURNAL — 11 August 2026
+28 AUGUST 2026 — PRODUCT IMAGERY + SUPABASE BLOG & CRM
+===============================================================================
+Session run 10:15 - 12:16. Two distinct bodies of work: wiring 67 product
+images to their headings, then building a complete Supabase-backed blog and
+CRM admin from nothing.
+
+Last commit before this session: 6798e8d (14 Aug 14:18).
+
+
+-------------------------------------------------------------------------------
+A. PRODUCT PAGE IMAGERY
+-------------------------------------------------------------------------------
+67 images were dropped into images/ between 10:15 and 10:54. Task: attach each
+to the product heading whose name it matched, across the five product pages
+only, leaving every other page untouched.
+
+  METHOD
+    Extracted the heading text and image markup from all five pages and
+    confirmed a uniform structure before editing anything:
+
+      page                       showcase / booster / stack / sludge
+      pumps.html                      4  /  3  /  4  /  3
+      watertreatment.html             4  /  3  /  4  /  3
+      Aeriation.html                  4  /  3  /  4  /  3
+      heatingsolution.html            4  /  3  /  4  /  3
+      Industrialchemicals.html        4  /  3  /  4  /  3
+
+    Because every page carries exactly 14 images in a fixed class order
+    (.pump-showcase-image, .pump-booster-image, .pump-stack-image,
+    .pump-sludge-photo), replacement was done by class + ordinal index rather
+    than by guessing at filenames. Deterministic and verifiable.
+
+  FILENAME NORMALISATION — a judgement call worth recording
+    The supplied filenames would have broken on deploy:
+      - "Coagulants & Flocculants .jpeg"  — "&" is a reserved URL character
+      - "corrosion inhibitor .jpeg"       — trailing space before extension
+      - "Zero Liquid Discharge (ZLD).jpeg"— parentheses
+      - mixed case throughout             — Netlify runs Linux (case-sensitive);
+                                            these work on macOS and fail live
+    All 65 were renamed to kebab-case web-safe equivalents matching their
+    headings, e.g. coagulants-flocculants.jpeg. This is the class of bug that
+    passes local testing and fails only in production.
+
+  RESULT
+    65 images wired, 0 broken paths, alt text set to the heading text
+    (replacing generic "Portfolio"/"Image" placeholders).
+
+    Two headings deliberately left on their old placeholders because no image
+    was supplied:
+      - pumps.html showcase: Triplex Plunger / Piston / Reciprocating / Jetting
+      - heatingsolution.html: Thermostatic Controls
+
+    The Thermostatic Controls gap was traced to "Unconfirmed 440649.crdownload"
+    — a Chrome download that never completed, timestamped 10:25, sitting exactly
+    between Heat Recovery Systems and Energy Monitoring in the upload sequence.
+
+  FOLLOW-UP (11:0x)
+    Two replacement images supplied and wired:
+      Thermostatic Controls  -> thermostatic-controls.jpeg  (replaced somu43.png)
+      Ion Exchange Softeners -> ion-exchange-softeners.webp (replaced the .jpeg)
+
+  TOTAL WEIGHT: 2.1 MB for all 65 — no performance concern.
+  Four are on the heavy side if trimming is ever wanted:
+    self-priming-pumps.jpg 297KB, end-suction-centrifugal-pumps.jpg 283KB,
+    electric-immersion-heaters.png 264KB, iron-manganese-removal.jpg 239KB.
+
+
+-------------------------------------------------------------------------------
+B. SUPABASE BLOG + CRM — ARCHITECTURE DECISIONS
+-------------------------------------------------------------------------------
+Three forks were settled before any code was written:
+
+  1. ADMIN STACK -> vanilla JS + Supabase CDN SDK
+     Rejected React/Vite and Astro. The site is a Webflow export with no build
+     system; introducing npm + a build command for an admin panel would have
+     meant maintaining two toolchains for one static site. Admin pages deploy
+     exactly like every other page.
+
+  2. AUTH -> Supabase Auth, single user
+     Originally requested as "hardcoded password in JS". Pushed back with a
+     specific, functional reason rather than a general security lecture:
+
+       The anon/publishable key must ship in client JS. A password checked in
+       JavaScript gates the UI but not the database. For admin writes to work
+       under that model, RLS would have to permit anonymous writes — meaning
+       anyone could POST or DELETE against blog_posts directly and wipe every
+       post without ever loading the admin page.
+
+     Resolution keeps the requested UX exactly (one email, one password, no
+     signup, no user management) while RLS requires an authenticated session
+     for every write. Same experience, data actually protected.
+
+  3. SCOPE -> blog fully working + CRM shell
+
+
+-------------------------------------------------------------------------------
+C. SUPABASE — WHAT WAS CREATED
+-------------------------------------------------------------------------------
+  Project ref : hlbwwsnxvmmvgamrdzdw
+  URL         : https://hlbwwsnxvmmvgamrdzdw.supabase.co
+  Key in use  : sb_publishable_...  (new-format key; replaces the old "anon"
+                key. Safe to ship in client code and safe to commit.)
+  NOT used    : sb_secret_...  (replaces "service_role"). Bypasses all RLS.
+                Never requested, never stored, never committed.
+
+  FILE: supabase/schema.sql  (idempotent — safe to re-run)
+
+  Tables (7):
+    blog_posts  id, title, slug(unique), excerpt, category, content,
+                content_format(markdown|html), author_name, author_role,
+                featured_image_url, status(draft|published|archived),
+                publish_date, read_time_minutes, seo_title, seo_description,
+                created_at, updated_at
+    accounts    name, industry, website, phone, address, notes
+    contacts    account_id FK, first/last name, email, phone, job_title, notes
+    leads       name, email, phone, company, source,
+                status(new|contacted|qualified|unqualified|converted)
+    deals       account/contact FK, title, value, currency, expected_close,
+                stage(enquiry|site-visit|quotation|negotiation|won|lost)
+    tasks       title, description, due_date, priority, status, CRM FKs
+    activities  activity_type, subject, body, occurred_at, CRM FKs
+
+    Deal stages were written to match the actual Hydromax sales process
+    (enquiry -> site visit -> quotation -> negotiation) rather than generic
+    CRM defaults.
+
+  Also created: 6 indexes on blog_posts + CRM query paths, updated_at triggers
+  on all mutable tables, storage bucket "blog-media" (public read), and one
+  seed post so the public page renders on first load.
+
+
+-------------------------------------------------------------------------------
+D. SECURITY AUDIT — 8-POINT CHECKLIST, VERIFIED IN CODE 28 AUG
+-------------------------------------------------------------------------------
+  1 Remove hardcoded password from JS   PASS  no credential literal in js/ or admin/
+  2 Use Supabase Auth                   PASS  signInWithPassword + requireAuth guard
+  3 RLS on every table                  PASS  7 tables created, 7 RLS-enabled
+  4 Verify every RLS policy             PASS  9 explicit + 1 loop over 6 CRM tables
+  5 Never expose service-role key       PASS  no sb_secret/service_role in repo
+  6 Restrict writes to CRM user         PASS  every write policy is `to authenticated`
+  7 Secure Storage policies             PASS  read anon; write/delete authenticated
+  8 DB not publicly writable            PASS  anon holds ONE grant total:
+                                              select on blog_posts where published
+
+  Policy map as built:
+    blog_posts  select -> anon           (status = 'published' only)
+    blog_posts  select -> authenticated  (all, including drafts)
+    blog_posts  insert/update/delete -> authenticated
+    accounts, contacts, leads, deals, tasks, activities -> ALL to authenticated
+    storage.objects select -> anon, authenticated
+    storage.objects insert/update/delete -> authenticated
+
+  LIMITATION, STATED HONESTLY: verified against the schema source only. The
+  build sandbox has no network route to supabase.co, so none of this was
+  confirmed live. Confirm in Supabase -> Database -> Policies that all 7 tables
+  report RLS enabled and none carries an "Unrestricted" badge.
+
+  A first RLS audit pass under-reported (showed 2 of 7 tables enabled). Cause
+  was a grep artifact — the regex assumed single spaces while the SQL uses
+  column alignment. Re-checked with whitespace-tolerant parsing: all 7 covered.
+  Recorded because the first result looked like a real vulnerability.
+
+
+-------------------------------------------------------------------------------
+E. FILES CREATED
+-------------------------------------------------------------------------------
+  supabase/schema.sql        full schema, RLS, storage, seed  (idempotent)
+
+  js/supabase-client.js      shared client. Exposes window.HM: db, getSession,
+                             signIn, signOut, requireAuth, uploadImage,
+                             listImages, deleteImage, slugify, readTime,
+                             formatDate, esc, renderContent, toast
+  js/admin-shell.js          renders sidebar + topbar once, enforces auth guard,
+                             fires "admin:ready" so pages render after auth
+  js/blog-list.js            public listing: category pills, live search
+  js/blog-post.js            article render + per-post <title>/OG meta
+
+  css/admin.css              standalone admin styling — deliberately shares no
+                             selectors with the Webflow CSS so the two can
+                             never break each other
+  css/blog.css               public blog, built on existing site tokens
+
+  admin/login.html           single-user sign-in, honours ?next= redirect
+  admin/dashboard.html       entry cards + live counts (published, drafts,
+                             open leads, open tasks)
+  admin/posts.html           listing, live search across
+                             title/slug/category/status/author, status filter
+  admin/post-edit.html       full editor — every requested field, auto-slug,
+                             live word count + read-time estimate, SEO
+                             character counters, upload + media browser
+  admin/media.html           bucket browser: multi-upload, copy URL, delete
+  admin/crm.html             ONE page driven by a SCHEMA config object, serving
+                             all five CRM entities with search + modal CRUD.
+                             Chosen over five near-identical pages: adding an
+                             entity is now a config entry, not a new file.
+
+  blog.html                  public listing, real site nav/footer spliced in
+  blog-post.html             article page, keyed on ?slug=
+  .gitignore                 secrets, journal, macOS noise, incomplete downloads
+
+
+-------------------------------------------------------------------------------
+F. IMPLEMENTATION NOTES WORTH REMEMBERING
+-------------------------------------------------------------------------------
+  * Content is rendered through DOMPurify before injection. Because the editor
+    permits raw HTML, this prevents a bad paste from injecting script into the
+    live site.
+
+  * Read time auto-calculates from word count at 200 wpm when the field is
+    left blank; the editor shows a live word count while typing.
+
+  * Slug auto-fills from the title until the slug field is manually touched,
+    then stops overwriting. Duplicate slugs are caught on save via Postgres
+    error 23505 and surfaced as a readable message instead of a raw error.
+
+  * The login ?next= parameter is validated against /^[a-z0-9._-]+\.html$/i
+    before redirect — an open redirect here would let a crafted link bounce an
+    admin to an external phishing page post-login.
+
+  * Public nav/footer for the two blog pages were extracted from service.html
+    at build time and had their w--current markers stripped, so the blog nav
+    matches the rest of the site exactly rather than being hand-rewritten.
+
+  * FIXED IN PASSING: index.html linked to blog.html and detail_blog.html, both
+    deleted 21 May — live broken links since then. detail_blog references
+    repointed to blog.html; the listing page now exists.
+
+  * "Insights" nav item added to all 7 public pages, desktop and off-canvas.
+
+  VERIFICATION RUN
+    node --check on all 4 external JS files          -> pass
+    node --check on all 16 extracted inline blocks   -> pass
+    every local src/href in new pages resolves       -> pass
+    (an initial run flagged 3 "broken" refs; all were JS template strings
+     inside <script> blocks — re-run with script blocks stripped: clean)
+
+
+-------------------------------------------------------------------------------
+G. OUTSTANDING — BLOCKING GO-LIVE
+-------------------------------------------------------------------------------
+  1. CREATE THE ADMIN USER. Not done yet. Supabase -> Authentication -> Users
+     -> Add user -> Create new user. TICK "Auto Confirm User" — without it the
+     account stays unconfirmed and login fails with "Email not confirmed",
+     because a new project has no SMTP configured. There are no default
+     credentials; none exist anywhere in the code by design.
+
+  2. Commit and deploy. ~79 untracked files at session end.
+
+  3. Confirm RLS live in the dashboard (see section D limitation).
+
+  4. Test logged-out: open blog.html in a private window. The seed post must
+     appear. If it does not, anon SELECT on blog_posts is not applying.
+
+  5. Still outstanding from 11 Aug: contact form notification email in Netlify
+     (submissions store but nobody is alerted), hydro1.mp4 re-encode (9.0 MB),
+     ~87 MB of unreferenced media in videos/.
+
+===============================================================================
+END OF 28 AUGUST ENTRY
+===============================================================================
+
+
+===============================================================================
+END OF JOURNAL — 28 August 2026
 ===============================================================================

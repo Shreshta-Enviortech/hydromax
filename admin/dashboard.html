@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard | Hydromax Admin</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="../videos/shlogo1.png" rel="shortcut icon" type="image/x-icon">
+  <link href="../css/admin.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ["Instrument Sans:400,500,600,700"] } });</script>
+</head>
+<body class="admin" data-page="dashboard" data-title="Dashboard">
+  <main id="ad-content">
+    <div class="ad-page-head">
+      <div>
+        <h2>Welcome to the Hydromax admin</h2>
+        <p style="color:var(--ad-ink-soft);margin:6px 0 0;font-size:14.5px">
+          Manage blog content, media, and CRM records. Powered by Supabase.
+        </p>
+      </div>
+    </div>
+
+    <div class="ad-grid" style="margin-bottom:26px">
+      <div class="ad-card">
+        <h2>Blog</h2>
+        <p>Create, edit, and publish articles in the <code>blog_posts</code> table.</p>
+        <div class="ad-btn-row">
+          <a class="ad-btn ad-btn-primary" href="post-edit.html">New post</a>
+          <a class="ad-btn" href="posts.html">View all posts</a>
+        </div>
+      </div>
+
+      <div class="ad-card">
+        <h2>Blog media</h2>
+        <p>Upload and manage images used as featured images and in post content.</p>
+        <div class="ad-btn-row">
+          <a class="ad-btn" href="media.html">Open media</a>
+        </div>
+      </div>
+
+      <div class="ad-card">
+        <h2>CRM</h2>
+        <p>Accounts, contacts, leads, deals, and tasks for enquiry follow-up.</p>
+        <div class="ad-btn-row">
+          <a class="ad-btn" href="crm.html?t=leads">Leads</a>
+          <a class="ad-btn" href="crm.html?t=deals">Deals</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ad-grid" id="stats"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/admin-shell.js"></script>
+  <script>
+    document.addEventListener('admin:ready', async function () {
+      var box = document.getElementById('stats');
+
+      async function count(table, filter) {
+        var q = HM.db.from(table).select('*', { count: 'exact', head: true });
+        if (filter) q = filter(q);
+        var res = await q;
+        return res.error ? null : res.count;
+      }
+
+      var cards = [
+        { label: 'Published posts', get: function () {
+            return count('blog_posts', function (q) { return q.eq('status', 'published'); }); },
+          href: 'posts.html' },
+        { label: 'Drafts', get: function () {
+            return count('blog_posts', function (q) { return q.eq('status', 'draft'); }); },
+          href: 'posts.html' },
+        { label: 'Open leads', get: function () {
+            return count('leads', function (q) { return q.eq('status', 'new'); }); },
+          href: 'crm.html?t=leads' },
+        { label: 'Open tasks', get: function () {
+            return count('tasks', function (q) { return q.neq('status', 'done'); }); },
+          href: 'crm.html?t=tasks' }
+      ];
+
+      box.innerHTML = cards.map(function (c) {
+        return '<div class="ad-card"><h2 style="font-size:30px;margin:0 0 2px" data-slot="' +
+               c.label + '">—</h2><p style="margin:0"><a href="' + c.href + '">' +
+               c.label + '</a></p></div>';
+      }).join('');
+
+      for (var i = 0; i < cards.length; i++) {
+        var n = await cards[i].get();
+        var el = box.querySelector('[data-slot="' + cards[i].label + '"]');
+        if (el) el.textContent = (n === null ? '—' : n);
+      }
+    });
+  </script>
+</body>
+</html>
