@@ -10,7 +10,7 @@
 
   function notFound(message) {
     box.innerHTML =
-      '<a class="article-back" href="blog.html">&#8592; Back to insights</a>' +
+      '<a class="article-back" href="blog.html">&#8592; Back to projects</a>' +
       '<h1 class="article-title">Article not found</h1>' +
       '<p class="article-excerpt">' + HM.esc(message ||
         'This article may have been moved or unpublished.') + '</p>' +
@@ -67,7 +67,7 @@
     }
 
     box.innerHTML =
-      '<a class="article-back" href="blog.html">&#8592; Back to insights</a>' +
+      '<a class="article-back" href="blog.html">&#8592; Back to projects</a>' +
       '<div class="article-meta">' + meta.join('<span class="blog-card-dot">·</span>') + '</div>' +
       '<h1 class="article-title">' + HM.esc(p.title) + '</h1>' +
       (p.excerpt ? '<p class="article-excerpt">' + HM.esc(p.excerpt) + '</p>' : '') +
